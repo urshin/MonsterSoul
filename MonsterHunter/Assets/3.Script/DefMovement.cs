@@ -82,13 +82,43 @@ public class DefMovement : MonoBehaviour
             {
                 if (!anim.GetBool("Roll"))
                 {
-
+                    
                     StartCoroutine(Roll_Movement());
                 }
 
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            //NormalAttack();
+            anim.SetBool("LeftClick",true);
+            if (anim.GetBool("AbleCombo"))
+            {
+                anim.SetTrigger("GoNextAttack");
+                anim.SetBool("AbleCombo", false);
+            }
+        }
+        if (Input.GetKeyUp (KeyCode.Mouse0))
+            {
+            anim.SetBool("LeftClick", false);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            //NormalAttack();
+            anim.SetBool("RightClick", true);
+            if (anim.GetBool("AbleCombo"))
+            {
+                anim.SetTrigger("GoNextAttack");
+                anim.SetBool("AbleCombo", false);
+            }
+        }
+        if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            anim.SetBool("RightClick", false);
+
+        }
 
 
 
@@ -97,6 +127,9 @@ public class DefMovement : MonoBehaviour
         anim.SetFloat("Horizontal", moveInput.x, 0.1f, Time.deltaTime);
         anim.SetFloat("Vertical", moveInput.y, 0.1f, Time.deltaTime);
     }
+
+   
+
 
     IEnumerator Roll_Movement()
     {
