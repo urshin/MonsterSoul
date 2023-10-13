@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using UnityEngine;
 
 public class DefMovement : MonoBehaviour
@@ -59,66 +60,56 @@ public class DefMovement : MonoBehaviour
     {
         GameManager.Instance.PlayerCurrentState = PlayerState.Move; //플레이어 현재상태
         currentSpeed = Mathf.SmoothDamp(currentSpeed, Nowspeed, ref speedSmoothVelocity, speedSmoothTime * Time.deltaTime); // 부드러운 속도 변화 계산
-
         if (velocityY > -10) velocityY -= Time.deltaTime * gravity; // 중력 적용
 
         Vector3 velocity = (dir * currentSpeed) + Vector3.up * velocityY; // 이동 속도 벡터 계산
 
         controller.Move(velocity * Time.deltaTime); // 이동 속도로 캐릭터 이동
 
+        anim.SetBool("IsMoving", anim.GetFloat("Movement") >= 0.1f); // 움직이는중인지
+
+        if(anim.GetBool("IsAttack"))
+        {
+            Nowspeed = 0;
+        }
+        else
+        {
+            Nowspeed = moveSpeed;
+        }
+
         if (controller.isGrounded)
         {
             anim.SetBool("Jump", false);
-
-            if (Input.GetButton("Jump"))
+            if (!anim.GetBool("IsAttack"))
             {
 
-                velocityY = JumpSpeed; // 수직 속도를 점프 속도로 설정
-                anim.SetBool("Jump", true);
-                //anim.Play("Jump");
+                if (Input.GetButton("Jump"))
+                {
 
+                    velocityY = JumpSpeed; // 수직 속도를 점프 속도로 설정
+                    anim.SetBool("Jump", true);
+                    //anim.Play("Jump");
+
+                }
             }
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 if (!anim.GetBool("Roll"))
                 {
-                    
+
                     StartCoroutine(Roll_Movement());
                 }
 
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if(anim.GetBool("IsAttack"))
         {
-            //NormalAttack();
-            anim.SetBool("LeftClick",true);
-            if (anim.GetBool("AbleCombo"))
-            {
-                anim.SetTrigger("GoNextAttack");
-                anim.SetBool("AbleCombo", false);
-            }
+           
         }
-        if (Input.GetKeyUp (KeyCode.Mouse0))
-            {
-            anim.SetBool("LeftClick", false);
 
-        }
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            //NormalAttack();
-            anim.SetBool("RightClick", true);
-            if (anim.GetBool("AbleCombo"))
-            {
-                anim.SetTrigger("GoNextAttack");
-                anim.SetBool("AbleCombo", false);
-            }
-        }
-        if (Input.GetKeyUp(KeyCode.Mouse1))
-        {
-            anim.SetBool("RightClick", false);
+        HandleMouseInput(KeyCode.Mouse0, "LeftClick");
+        HandleMouseInput(KeyCode.Mouse1, "RightClick");
 
-        }
 
 
 
@@ -128,7 +119,22 @@ public class DefMovement : MonoBehaviour
         anim.SetFloat("Vertical", moveInput.y, 0.1f, Time.deltaTime);
     }
 
-   
+    void HandleMouseInput(KeyCode mouseButton, string boolName)
+    {
+        if (Input.GetKeyDown(mouseButton))
+        {
+            anim.SetBool(boolName, true);
+            if (anim.GetBool("AbleCombo"))
+            {
+                anim.SetTrigger("GoNextAttack");
+                anim.SetBool("AbleCombo", false);
+            }
+        }
+        if (Input.GetKeyUp(mouseButton))
+        {
+            anim.SetBool(boolName, false);
+        }
+    }
 
 
     IEnumerator Roll_Movement()

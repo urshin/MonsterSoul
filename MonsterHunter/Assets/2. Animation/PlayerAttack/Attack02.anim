@@ -128937,6 +128937,13 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
+  - time: 0
+    functionName: IsAttack_True
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 1.8333334
     functionName: ture_AbleCombo
     data: 
@@ -128946,6 +128953,13 @@ AnimationClip:
     messageOptions: 0
   - time: 2.6333334
     functionName: False_AbleCombo
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 3.9
+    functionName: IsAttack_False
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
