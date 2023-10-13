@@ -97,13 +97,13 @@ public class Player : MonoBehaviour
         
 
 
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            Nowspeed = RunningSpeed;
-        }
-        else
-        {
-            Nowspeed = speed;
-        }
+        //if (Input.GetKey(KeyCode.LeftShift))
+        //{
+        //    Nowspeed = RunningSpeed;
+        //}
+        //else
+        //{
+        //    Nowspeed = speed;
+        //}
     }
 }
