@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerState
-{
-    Move,
-    Attack,
-    Jump,
-    Roll,
-}
+//public enum PlayerState
+//{
+//    Move,
+//    Attack,
+//    Jump,
+//    Roll,
+//}
 
 public class GameManager : MonoBehaviour
 {
@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public PlayerState PlayerCurrentState;
+   // public PlayerState PlayerCurrentState;
 
 
 

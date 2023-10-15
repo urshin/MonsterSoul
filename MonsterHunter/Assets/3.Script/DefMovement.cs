@@ -5,37 +5,48 @@ using UnityEngine;
 
 public class DefMovement : MonoBehaviour
 {
-    CharacterController controller; // 캐릭터 컨트롤러 컴포넌트
-    Animator anim; // 애니메이터 컴포넌트
-    Transform cam; // 메인 카메라의 Transform
+    public static DefMovement Instance;
 
-    float speedSmoothVelocity; // 속도 부드럽게 변화시키는 데 사용되는 변수
-    float speedSmoothTime; // 속도 부드럽게 변화시키는 데 사용되는 시간
-    [SerializeField] float currentSpeed; // 현재 이동 속도
-    [SerializeField] float velocityY; // 수직 속도 (중력 적용)
-    Vector3 moveInput; // 이동 입력 벡터
-    Vector3 dir; // 이동 방향 벡터
+    // Awake 메소드는 게임 오브젝트가 활성화될 때 호출됩니다.
+    public void Awake()
+    {
+        if (Instance == null) // 정적으로 자신을 체크함, null인 경우에만 실행
+        {
+            Instance = this; // 이후 자기 자신을 저장함.
+        }
+    }
 
-    [Header("Settings")]
-    [SerializeField] float gravity = 25f; // 중력
-    [SerializeField] float Nowspeed;      // 캐릭터 현재 움직임 스피드.
-    [SerializeField] float moveSpeed = 4f; // 이동 속도
-    [SerializeField] float RunningSpeed = 7f; //캐릭터 뛰기 스피드
-    [SerializeField] float rotateSpeed = 3f; // 회전 속도
-    [SerializeField] float JumpSpeed = 5f; //점프 
+    public CharacterController controller; // 캐릭터 컨트롤러 컴포넌트
+    public Animator anim; // 애니메이터 컴포넌트
+    public Transform cam; // 메인 카메라의 Transform
+
+    public float speedSmoothVelocity; // 속도 부드럽게 변화시키는 데 사용되는 변수
+    public float speedSmoothTime; // 속도 부드럽게 변화시키는 데 사용되는 시간
+    public float currentSpeed; // 현재 이동 속도
+    public float velocityY; // 수직 속도 (중력 적용)
+    public Vector3 moveInput; // 이동 입력 벡터
+    public Vector3 dir; // 이동 방향 벡터
+    public float Nowspeed; // 캐릭터 현재 움직임 스피드.
+
+    [Header("Settings")]  // 나중에 플레이어에 따라 바뀜 // start에서 참조해오기
+    public float gravity = 25f; // 중력
+    public float moveSpeed = 4f; // 이동 속도
+    public float RunningSpeed = 7f; // 캐릭터 뛰기 스피드
+    public float rotateSpeed = 3f; // 회전 속도
+    public float JumpSpeed = 5f; // 점프 
 
     public bool lockMovement; // 이동 잠금 여부
 
     void Start()
     {
-        //anim = GetComponent<Animator>(); // 애니메이터 컴포넌트 가져오기
+        // anim = GetComponent<Animator>(); // 애니메이터 컴포넌트 가져오기
         anim = GetComponentInChildren<Animator>(); // 애니메이터 컴포넌트 가져오기
         controller = GetComponent<CharacterController>(); // 캐릭터 컨트롤러 컴포넌트 가져오기
         cam = Camera.main.transform; // 메인 카메라의 Transform 가져오기
-        Nowspeed = moveSpeed; //이동속도 초기화
+        Nowspeed = moveSpeed; // 이동 속도 초기화
     }
 
-    void Update()
+    public void Update()
     {
         GetInput(); // 입력 받기
         PlayerMovement(); // 플레이어 이동
@@ -53,12 +64,20 @@ public class DefMovement : MonoBehaviour
         forward.Normalize(); // 정규화하여 방향 벡터 생성
         right.Normalize(); // 정규화하여 방향 벡터 생성
 
-        dir = (forward * moveInput.y + right * moveInput.x).normalized; // 입력을 기반으로 이동 방향 벡터 생성
+        // 공격, 구르기 또는 점프 중이 아닌 경우에만 이동 입력을 처리
+        if (anim.GetBool("IsAttack") || anim.GetBool("IsRoll") || anim.GetBool("IsJump"))
+        {
+            // 이동 입력을 무시
+        }
+        else
+        {
+            Nowspeed = moveSpeed;
+            dir = (forward * moveInput.y + right * moveInput.x).normalized; // 입력을 기반으로 이동 방향 벡터 생성
+        }
     }
 
     private void PlayerMovement()
     {
-        GameManager.Instance.PlayerCurrentState = PlayerState.Move; //플레이어 현재상태
         currentSpeed = Mathf.SmoothDamp(currentSpeed, Nowspeed, ref speedSmoothVelocity, speedSmoothTime * Time.deltaTime); // 부드러운 속도 변화 계산
         if (velocityY > -10) velocityY -= Time.deltaTime * gravity; // 중력 적용
 
@@ -66,52 +85,30 @@ public class DefMovement : MonoBehaviour
 
         controller.Move(velocity * Time.deltaTime); // 이동 속도로 캐릭터 이동
 
-        anim.SetBool("IsMoving", anim.GetFloat("Movement") >= 0.1f); // 움직이는중인지
-
-        if(anim.GetBool("IsAttack"))
-        {
-            Nowspeed = 0;
-        }
-        else
-        {
-            Nowspeed = moveSpeed;
-        }
+        anim.SetBool("IsMoving", anim.GetFloat("Movement") >= 0.1f); // 움직이는 중인지 체크
 
         if (controller.isGrounded)
         {
-            anim.SetBool("Jump", false);
+            anim.SetBool("IsJump", false);
             if (!anim.GetBool("IsAttack"))
             {
-
-                if (Input.GetButton("Jump"))
+                if (Input.GetButton("Jump") && !anim.GetBool("IsRoll"))
                 {
-
-                    velocityY = JumpSpeed; // 수직 속도를 점프 속도로 설정
-                    anim.SetBool("Jump", true);
-                    //anim.Play("Jump");
-
+                    anim.SetBool("IsJump", true);
                 }
             }
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                if (!anim.GetBool("Roll"))
+                if (!anim.GetBool("IsRoll"))
                 {
-
-                    StartCoroutine(Roll_Movement());
+                    Roll();
+                    anim.SetTrigger("Rolling");
                 }
-
             }
-        }
-        if(anim.GetBool("IsAttack"))
-        {
-           
         }
 
         HandleMouseInput(KeyCode.Mouse0, "LeftClick");
         HandleMouseInput(KeyCode.Mouse1, "RightClick");
-
-
-
 
         // 애니메이터의 파라미터 설정 
         anim.SetFloat("Movement", dir.magnitude, 0.1f, Time.deltaTime);
@@ -119,7 +116,7 @@ public class DefMovement : MonoBehaviour
         anim.SetFloat("Vertical", moveInput.y, 0.1f, Time.deltaTime);
     }
 
-    void HandleMouseInput(KeyCode mouseButton, string boolName)
+    void HandleMouseInput(KeyCode mouseButton, string boolName) // 콤보
     {
         if (Input.GetKeyDown(mouseButton))
         {
@@ -136,13 +133,17 @@ public class DefMovement : MonoBehaviour
         }
     }
 
-
-    IEnumerator Roll_Movement()
+    public void Roll()
     {
-        anim.SetBool("Roll", true);
+        StartCoroutine(Roll_Movement());
+    }
+
+    private IEnumerator Roll_Movement()
+    {
+        anim.SetBool("IsRoll", true);
 
         // 구르는 동안의 방향 벡터 저장
-        Vector3 rollDir = dir;
+        Vector3 rollDir = (cam.forward * moveInput.y + cam.right * moveInput.x).normalized;
         rollDir.y = 0; // Y값을 0으로 설정하여 수직 이동 방향을 무시
 
         // 목표 이동 거리 설정
@@ -160,11 +161,6 @@ public class DefMovement : MonoBehaviour
             Vector3 moveDirection = (endPos - transform.position).normalized;
             controller.Move(moveDirection * (moveSpeed + (moveSpeed / 2)) * Time.deltaTime);
             yield return null;
-        }
-
-        if (Vector3.Distance(transform.position, endPos) <= 1f)
-        {
-            anim.SetBool("Roll", false);
         }
     }
 

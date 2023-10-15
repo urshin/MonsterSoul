@@ -27,6 +27,8 @@ public class CameraFollow : MonoBehaviour
         Cursor.visible = false; // 커서를 숨김
         Cursor.lockState = CursorLockMode.Locked; // 커서 잠금
         cam = Camera.main.transform; // 메인 카메라의 Transform 가져옴
+        //target = GameObject.FindGameObjectWithTag("Player").transform;
+        
     }
 
     void Update()
@@ -39,9 +41,11 @@ public class CameraFollow : MonoBehaviour
         if (!lockedTarget)
         {
             CameraTargetRotation(); // 일반적인 카메라 회전 동작
+           
         }
         else
         {
+            
             LookAtTarget(); // 타겟을 바라보는 카메라 회전 동작
         }
 
@@ -62,6 +66,12 @@ public class CameraFollow : MonoBehaviour
     public float x;
     public float y;
 
+    //bool toggle;
+    //void FreeLook()
+    //{
+    //    rotY = 1.8f; // Y 회전값을 고정값으로 설정 (타겟을 고정으로 바라봄)
+    //}
+
     void CameraTargetRotation()
     {
         // 나중에 초기 카메라값 넣기
@@ -70,12 +80,13 @@ public class CameraFollow : MonoBehaviour
         y = Input.GetAxis("Mouse Y") + 2;
         Vector2 mouseAxis = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")); // 마우스 움직임 얻기
         rotX += (mouseAxis.x * senstivity) * Time.deltaTime; // X 회전값 갱신
-        rotY -= (mouseAxis.y * senstivity) * Time.deltaTime; // Y 회전값 갱신
-
+        rotY -= ((mouseAxis.y * senstivity) * Time.deltaTime); // Y 회전값 갱신
+        
         rotY = Mathf.Clamp(rotY, 0,180); // Y 회전값을 최소와 최대 값 사이로 제한 (-clampAxis.x를 사용하여 음수 값으로 제한)
 
         Quaternion localRotation = Quaternion.Euler(rotY, rotX, 0); // X와 Y 회전값을 이용한 회전 Quaternion 생성
         transform.rotation = Quaternion.Slerp(transform.rotation, localRotation, rotate_Smoothing); // 부드러운 회전 적용
+        
     }
 
     void LookAtTarget()
