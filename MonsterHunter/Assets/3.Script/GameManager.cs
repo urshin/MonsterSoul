@@ -23,7 +23,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-   // public PlayerState PlayerCurrentState;
+    public bool IsBossRoomEnter;
+
+    // public PlayerState PlayerCurrentState;
 
 
 

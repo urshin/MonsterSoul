@@ -77,7 +77,7 @@ public class CameraFollow : MonoBehaviour
         // 나중에 초기 카메라값 넣기
 
         x = Input.GetAxis("Mouse X");
-        y = Input.GetAxis("Mouse Y") + 2;
+        y = Input.GetAxis("Mouse Y");
         Vector2 mouseAxis = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")); // 마우스 움직임 얻기
         rotX += (mouseAxis.x * senstivity) * Time.deltaTime; // X 회전값 갱신
         rotY -= ((mouseAxis.y * senstivity) * Time.deltaTime); // Y 회전값 갱신
