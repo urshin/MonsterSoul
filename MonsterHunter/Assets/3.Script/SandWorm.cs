@@ -8,8 +8,8 @@ using UnityEngine.Experimental.GlobalIllumination;
 
 public class SandWorm : MonoBehaviour
 {
-   
-    float SandWormHP;
+
+    public float SandWormHP;
     public float SandWormMaxHP;
     public float SandWormSpeed;
 
@@ -17,6 +17,10 @@ public class SandWorm : MonoBehaviour
 
 
     public GameObject Player;
+
+    public bool IsBulling = false;
+
+
    
     public enum SandWormState 
     {
@@ -37,8 +41,8 @@ public class SandWorm : MonoBehaviour
         SandWormHP = SandWormMaxHP; //HP√ ±‚»≠
         Player = GameObject.FindGameObjectWithTag("Player");
     }
+ 
 
-    
     void Update()
     {
 

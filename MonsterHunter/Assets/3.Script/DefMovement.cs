@@ -155,13 +155,13 @@ public class DefMovement : MonoBehaviour
         // 목표 지점 계산
         Vector3 endPos = startPos + rollDir.normalized * rollDistance;
 
-        while (Vector3.Distance(transform.position, endPos) > 1f)
-        {
+        //while (Vector3.Distance(transform.position, endPos) > 1f)
+        //{
             // 계산된 목표 지점 방향으로 이동
             Vector3 moveDirection = (endPos - transform.position).normalized;
             controller.Move(moveDirection * (moveSpeed + (moveSpeed / 2)) * Time.deltaTime);
             yield return null;
-        }
+        //}
     }
 
     private void PlayerRotation()

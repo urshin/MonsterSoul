@@ -112,8 +112,8 @@ public class EnemyLockOn : MonoBehaviour
         float h2 = closestTarget.localScale.y;
         float h = h1 * h2;
         float half_h = (h / 2) / 2;
-       // currentYOffset = h - half_h;
-        currentYOffset =  half_h;
+        currentYOffset = h - half_h;
+      //  currentYOffset =  half_h;
 
         //if (zeroVert_Look && currentYOffset > 1.6f && currentYOffset < 1.6f * 3)
         //    currentYOffset = 1.6f;

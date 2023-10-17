@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Player : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class Player : MonoBehaviour
 
     public GameObject Weapon; // 무기 프리팹
     public GameObject CurrentWeapon; // 현재 장착된 무기를 저장할 변수
+
+   // public float PlayerTotalDamage;
+
     [SerializeField] Transform WeaponPos_r; // 무기를 소환할 위치 (오른쪽 손 위치)
 
     private void Start()
@@ -46,5 +50,13 @@ public class Player : MonoBehaviour
     {
         // 무기의 공격력, 플레이어의 공격력, 플레이어의 모션 데미지를 합산한 값을 로그로 출력
         Debug.Log(WeaponScript.GetComponent<Weapon>().Attack + PlayerAttack + PlayerMotionDamage);
+        //PlayerTotalDamage = WeaponScript.GetComponent<Weapon>().Attack + PlayerAttack + PlayerMotionDamage;
     }
+
+    public float PlayerTotalDamage()
+    {
+        return WeaponScript.GetComponent<Weapon>().Attack + PlayerAttack + PlayerMotionDamage; 
+    }
+
+
 }
