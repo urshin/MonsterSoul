@@ -44,13 +44,15 @@ public class InGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!enterCheck)
+        if (!GameManager.Instance.IsBossRoomEnter)
         {
             DrawRayToCheckEnterBoss();
+            
         }
+     
         
     }
-    bool enterCheck = false;
+   
     private void DrawRayToCheckEnterBoss()
     {
         Vector3 center = BossTrigger.transform.position;
@@ -66,7 +68,7 @@ public class InGameManager : MonoBehaviour
             {
                 Debug.Log("∫∏Ω∫∑Î ¿‘¿Â");
                 GameManager.Instance.IsBossRoomEnter = true;
-                enterCheck = true;
+               
                 playSandWormOpening();
                 break;
             }
@@ -76,7 +78,7 @@ public class InGameManager : MonoBehaviour
     {
         Director.playableAsset = timelineAssets[FindScene("SandWormOpening")];
         Director.Play();
-        SandWormNavTarget.GetComponent<AutoMoverTest>().enabled= true;
+        
     }
 
 
