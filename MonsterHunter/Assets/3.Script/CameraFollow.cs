@@ -13,7 +13,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] float rotate_Smoothing = 5; // 카메라 회전 부드러움 정도
     [SerializeField] float senstivity = 60; // 마우스 감도
 
-    float rotX, rotY; // 카메라 회전값 (X와 Y 각)
+    [SerializeField] float rotX , rotY; // 카메라 회전값 (X와 Y 각)
     bool cursorLocked = false; // 커서 잠금 상태 여부
     Transform cam; // 메인 카메라의 Transform
 
@@ -78,6 +78,7 @@ public class CameraFollow : MonoBehaviour
 
         x = Input.GetAxis("Mouse X");
         y = Input.GetAxis("Mouse Y");
+        
         Vector2 mouseAxis = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")); // 마우스 움직임 얻기
         rotX += (mouseAxis.x * senstivity) * Time.deltaTime; // X 회전값 갱신
         rotY -= ((mouseAxis.y * senstivity) * Time.deltaTime); // Y 회전값 갱신
@@ -89,12 +90,13 @@ public class CameraFollow : MonoBehaviour
         
     }
 
+    [SerializeField] float PlusPoint =0;
     void LookAtTarget()
     {
         transform.rotation = cam.rotation; // 타겟을 바라보는 카메라 회전을 메인 카메라의 회전값으로 설정
         Vector3 r = cam.eulerAngles; // 메인 카메라의 각도 벡터
         rotX = r.y; // X 회전값을 메인 카메라의 Y 각도로 설정
-        rotY = 1.8f; // Y 회전값을 고정값으로 설정 (타겟을 고정으로 바라봄)
+        rotY = 1.8f + PlusPoint; // Y 회전값을 고정값으로 설정 (타겟을 고정으로 바라봄)
        
     }
 }

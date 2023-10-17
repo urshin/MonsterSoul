@@ -11,6 +11,7 @@ public class SandWormSpine : MonoBehaviour
         if(!sandWorm.IsBulling)
         sandWorm.SandWormHP -= Player.Instance.PlayerTotalDamage();
     }
+
     private void OnTriggerStay(Collider other)
     {
         sandWorm.IsBulling = true;
@@ -19,5 +20,14 @@ public class SandWormSpine : MonoBehaviour
     {
         sandWorm.IsBulling = false;
     }
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    Debug.Log(collision.gameObject.name+"enter");
+    //}
+    //private void OnCollisionExit(Collision collision)
+    //{
+    //    Debug.Log(collision.gameObject.name + "exit");
+
+    //}
 
 }
