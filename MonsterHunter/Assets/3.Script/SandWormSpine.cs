@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SandWormSpine : MonoBehaviour
 {
-    public SandWorm sandWorm; //»÷µå¿ú ÂüÁ¶
+    public SandWormBoss sandWorm; //»÷µå¿ú ÂüÁ¶
 
     private void OnTriggerEnter(Collider other)
     {

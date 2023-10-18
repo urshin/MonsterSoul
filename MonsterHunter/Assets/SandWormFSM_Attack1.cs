@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class SandWormFSM_Attack1 : StateMachineBehaviour
 {
-     SandWorm sandWorm; //샌드웜 참조
+     SandWormBoss sandWorm; //샌드웜 참조
      GameObject Player;
     AutoMover wormAutoMover;
      GameObject worm;
@@ -19,7 +19,7 @@ public class SandWormFSM_Attack1 : StateMachineBehaviour
     // OnStateEnter는 전환 시작시 호출되며 상태 기계가 이 상태를 평가하기 시작합니다.
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Destroy(wormAutoMover);
+        
         animator.SetBool("Idle", false);
         Player = GameObject.FindGameObjectWithTag("Player");
         worm = animator.gameObject;

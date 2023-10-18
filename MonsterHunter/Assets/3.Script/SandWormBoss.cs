@@ -7,9 +7,17 @@ using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 
 
-public class SandWorm : MonoBehaviour
+public class SandWormBoss : MonoBehaviour
 {
-
+    public static SandWormBoss Instance;
+    public void Awake()
+    {
+        if (Instance == null) //정적으로 자신을 체크함, null인진
+        {
+            Instance = this; //이후 자기 자신을 저장함.
+           
+        }
+    }
     public float SandWormHP;
     public float SandWormMaxHP;
     public float SandWormSpeed;
@@ -54,7 +62,15 @@ public class SandWorm : MonoBehaviour
 
     }
 
+    public void StartPattern(string name)
+    {
+        Debug.Log(name);
+        anime_Nav.SetBool(name, true);
+    }
+    public void StopPattern(string name)
+    {
+        anime_Nav.SetBool(name, false);
+    }
 
-  
 
 }

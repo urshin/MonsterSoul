@@ -24,6 +24,7 @@ public class SandWormFSM_Idle : StateMachineBehaviour
     // OnStateEnter는 전환 시작 시 호출되며 상태 기계가 이 상태를 평가하기 시작할 때입니다.
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        
         SetPosition = GameObject.FindGameObjectWithTag("EnemyUpPos").transform;
         UnderSetPosition = GameObject.FindGameObjectWithTag("EnemyUnderPos").transform;
 

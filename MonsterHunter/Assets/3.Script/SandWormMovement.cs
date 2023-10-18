@@ -4,12 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static SandWorm;
+using static SandWormBoss;
 
 public class SandWormMovement : MonoBehaviour
 {
 
-    public SandWorm sandWorm; //»÷µå¿ú ÂüÁ¶
+   // public SandWorm sandWorm; //»÷µå¿ú ÂüÁ¶
 
     Animator anime;
 
@@ -37,7 +37,7 @@ public class SandWormMovement : MonoBehaviour
 
     private void MakeAutoMove(GameObject Position, float Speed)
     {
-        sandWorm.currentSandWormState = SandWorm.SandWormState.Opening;
+       // sandWorm.currentSandWormState = SandWorm.SandWormState.Opening;
         PositionAnchor.Clear();
         PositionAnchor = new List<Transform>();
         Debug.Log(Position.transform.childCount);
@@ -83,22 +83,19 @@ public class SandWormMovement : MonoBehaviour
     void PauseAutoMoving()
     {
         CurrentAutoMover.Pause();
-        sandWorm.currentSandWormState = SandWorm.SandWormState.Ingage;
+       // sandWorm.currentSandWormState = SandWorm.SandWormState.Ingage;
         Invoke("Ingage", 3f);
         
     }
     void Ingage()
     {
-        StartAttackPatter("Ingage");
+       SandWormBoss.Instance.StartPattern("Ingage");
         //ÇÃ·¹ÀÌ¾î ¿òÁ÷ÀÓ °¡´É
       
         anime.SetBool("InGame", true);
     }
 
-    void StartAttackPatter(string name)
-    {
-        anime.SetBool(name,true);
-    }
+    
 
     private void Update()
     {
