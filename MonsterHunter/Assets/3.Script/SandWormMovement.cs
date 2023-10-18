@@ -70,14 +70,16 @@ public class SandWormMovement : MonoBehaviour
         Invoke("PauseAutoMoving", Speed - 0.1f);
     }
 
-    void MakeAuto()
-    {
-        MakeAutoMove(position, 10);
-    }
-    void StartAutoMoving()
-    {
-        CurrentAutoMover.StartMoving();
-    }
+
+
+    //void MakeAuto()
+    //{
+    //    MakeAutoMove(position, 10);
+    //}
+    //void StartAutoMoving()
+    //{
+    //    CurrentAutoMover.StartMoving();
+    //}
     void PauseAutoMoving()
     {
         CurrentAutoMover.Pause();
@@ -88,15 +90,15 @@ public class SandWormMovement : MonoBehaviour
     void Ingage()
     {
         StartAttackPatter("Ingage");
+        //플레이어 움직임 가능
+      
+        anime.SetBool("InGame", true);
     }
 
     void StartAttackPatter(string name)
     {
         anime.SetBool(name,true);
     }
-
-    bool ingage = false;
-
 
     private void Update()
     {
@@ -108,28 +110,6 @@ public class SandWormMovement : MonoBehaviour
 
                 BossEnter = false;
             }
-
-
-            //switch (sandWorm.currentSandWormState)
-            //{
-            //    case SandWorm.SandWormState.Ingage:
-            //        if(!ingage)
-            //        {
-            //        anime.SetBool("Ingage", true);
-            //            ingage= true;  
-            //        }
-                    
-
-            //        break;
-
-            //    case SandWorm.SandWormState.Attack1:
-
-            //        anime.SetBool("Attack1", true);
-
-
-            //        break;
-
-            //}
 
 
 

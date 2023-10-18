@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,9 +19,10 @@ public class SandWorm : MonoBehaviour
 
     public GameObject Player;
 
+
     public bool IsBulling = false;
 
-
+    public Animator anime_Nav;
    
     public enum SandWormState 
     {
@@ -40,13 +42,19 @@ public class SandWorm : MonoBehaviour
         currentSandWormState = SandWormState.Opening;
         SandWormHP = SandWormMaxHP; //HP√ ±‚»≠
         Player = GameObject.FindGameObjectWithTag("Player");
+       
+
     }
  
 
     void Update()
     {
-
+        anime_Nav.SetFloat("HP", (SandWormHP/SandWormMaxHP) *100);
        
 
     }
+
+
+  
+
 }

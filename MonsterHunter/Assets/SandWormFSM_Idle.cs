@@ -6,70 +6,129 @@ using UnityEngine;
 
 public class SandWormFSM_Idle : StateMachineBehaviour
 {
-    public Transform UnderSetPosition;
-    public Transform SetPosition;
+    [SerializeField] Transform UnderSetPosition;
+    [SerializeField] Transform SetPosition;
 
-    private float journeyLength;
     private float startTime;
-    private bool isMoving = false;
+    private float UnderSetPositionjourneyLength;
+    private bool isMoving_UnderSetPosition = false;
+    private float SetPositionjourneyLength;
+    private bool isMoving_SetPosition = false;
 
+    public float UndermovementSpeed = 200.0f; // 이동 속도
     public float movementSpeed = 2.0f; // 이동 속도
+
+    [SerializeField] float timer;
+    [SerializeField] float WaitingTime;
 
     // OnStateEnter는 전환 시작 시 호출되며 상태 기계가 이 상태를 평가하기 시작할 때입니다.
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        SetPosition = GameObject.FindGameObjectWithTag("EnemyUpPos").transform;
+        UnderSetPosition = GameObject.FindGameObjectWithTag("EnemyUnderPos").transform;
+
+        animator.SetBool("AttackTime", false);
         if (animator.GetBool("Idle"))
         {
-            animator.transform.position = UnderSetPosition.position;
+
             // 현재 위치와 SetPosition 사이의 거리를 계산합니다.
-            journeyLength = Vector3.Distance(animator.transform.position, SetPosition.position);
+            UnderSetPositionjourneyLength = Vector3.Distance(animator.transform.position, UnderSetPosition.position);
             startTime = Time.time;
-            isMoving = true;
+            isMoving_UnderSetPosition = true;
+
+            SetPositionjourneyLength = Vector3.Distance(UnderSetPosition.position, SetPosition.position);
+            startTime = Time.time;
+            isMoving_SetPosition = false;
+
+
+            timer = 0;
+
+         
+
         }
     }
 
     // OnStateUpdate는 OnStateEnter와 OnStateExit 콜백 사이의 각 업데이트 프레임에서 호출됩니다.
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (isMoving)
+        if (isMoving_UnderSetPosition)
         {
+
+            // 현재 시간에 의해 이동한 거리를 계산합니다.
+            float distanceCovered = (Time.time - startTime) * UndermovementSpeed;
+
+            // 완료된 여정의 분수를 계산합니다.
+            float fractionOfJourney = distanceCovered / UnderSetPositionjourneyLength;
+
+            // 애니메이터의 위치를 SetPosition으로 향해 이동합니다.
+            animator.transform.position = Vector3.Lerp(animator.transform.position, UnderSetPosition.position, fractionOfJourney);
+
+            // 여정이 완료되었는지 확인합니다.
+            if (fractionOfJourney >= 2.0f)
+            {
+                isMoving_UnderSetPosition = false;
+                isMoving_SetPosition = true;
+         
+            }
+        }
+
+        if (isMoving_SetPosition)
+        {
+
             // 현재 시간에 의해 이동한 거리를 계산합니다.
             float distanceCovered = (Time.time - startTime) * movementSpeed;
 
             // 완료된 여정의 분수를 계산합니다.
-            float fractionOfJourney = distanceCovered / journeyLength;
+            float fractionOfJourney = distanceCovered / SetPositionjourneyLength;
 
             // 애니메이터의 위치를 SetPosition으로 향해 이동합니다.
             animator.transform.position = Vector3.Lerp(animator.transform.position, SetPosition.position, fractionOfJourney);
 
             // 여정이 완료되었는지 확인합니다.
-            if (fractionOfJourney >= 1.0f)
+            if (fractionOfJourney >= 2.0f)
             {
-                isMoving = false;
-                animator.SetBool("Idle", false);
-                //나중에 시간 체크하고 공격 모션 움직이기
-
-
+                isMoving_SetPosition = false;
 
             }
         }
+
+
+
+
+        if (!isMoving_UnderSetPosition && !isMoving_SetPosition)
+        {
+            timer += Time.deltaTime;
+
+            if (timer >= WaitingTime)
+            {
+
+                if(animator.GetFloat("HP") >= 30)
+                {
+                animator.SetBool("AttackTime",true);
+
+                }
+                if (animator.GetFloat("HP") < 30)
+                {
+                    // 30미만일때
+
+                }
+
+                //나중에 랜덤 함수 돌리기
+                animator.SetBool("SWAttack1",true);
+                animator.SetBool("Idle", false);
+                timer= 0;
+            }
+        
+        }
+
+
     }
 
     // OnStateExit는 전환 종료 시 호출되며 상태 기계가 이 상태를 평가를 완료할 때입니다.
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetBool("Idle", false);
+        //animator.SetBool("Idle", false);
     }
 
-    // OnStateMove는 Animator.OnAnimatorMove() 이후 바로 호출됩니다.
-    //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // 루트 모션을 처리하고 영향을 미치는 코드를 구현합니다.
-    //}
-
-    // OnStateIK는 Animator.OnAnimatorIK() 이후 바로 호출됩니다.
-    //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // 애니메이션 IK (역행운학)을 설정하는 코드를 구현합니다.
-    //}
+   
 }

@@ -1,34 +1,85 @@
+using AutoMoverPro;
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    public CinemachineVirtualCamera virtualCamera1;
-    public CinemachineFreeLook virtualCamera2;
 
-    private void Update()
+    GameObject playerObject;
+    AutoMover worm;
+    private void Start()
     {
-        // 특정 키 또는 이벤트(예: 플레이어가 어떤 지점에 도달하는 등)에 따라 카메라 전환을 수행
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            SwitchCamera();
-        }
+
+        playerObject = GameObject.FindGameObjectWithTag("Player");
+
+
+        worm = gameObject.AddComponent<AutoMover>();
+
+        MakingSinMovement(10, 10);
     }
 
-    private void SwitchCamera()
+    private void MakingSinMovement(float _sideVectorMagnitude, int _HowMany)
     {
-        // 현재 활성화된 Virtual Camera를 비활성화하고 다른 Virtual Camera를 활성화
-        if (virtualCamera1.Priority > virtualCamera2.m_Priority)
+        worm.RunOnStart = false;
+
+        worm.AnchorPointSpace = AutoMoverAnchorPointSpace.world;
+
+        worm.FaceForward = true;
+        worm.DynamicUpVector = false;
+        worm.AddAnchorPoint(transform.position + new Vector3(0, 0, 0), new Vector3(0, 0, 0), transform.localScale);
+        // Sin 함수를 사용하여 X 좌표를 조정하여 양옆으로 움직임
+  
+  
+        for (int i = 1; i <= _HowMany; i++)
         {
-            virtualCamera1.Priority = 10; // 현재 활성화된 카메라의 Priority 값을 기본값(예: 10)으로 설정
-            virtualCamera2.m_Priority = 11; // 다른 카메라의 Priority 값을 높임
+        
+            Vector3 position = (i * (((playerObject.transform.position - gameObject.transform.position) / (_HowMany+1f))) + transform.position);
+
+
+            // 이 오브젝트가 플레이어 오브젝트를 바라보는 방향을 계산합니다.
+            Vector3 directionToPlayer = playerObject.transform.position - transform.position;
+
+            // 수직 벡터를 계산합니다. 이를 위해 x와 z 구성 요소를 교환하고 그 중 하나를 부호를 바꾸어 사용합니다.
+            Vector3 sideVector = new Vector3(-directionToPlayer.z, 0, directionToPlayer.x).normalized;
+
+            // 필요한 경우 sideVector의 크기를 조절할 수 있습니다.
+            float sideVectorMagnitude = _sideVectorMagnitude; // 필요한 크기에 맞게 이 값을 조절하세요.
+            sideVector *= sideVectorMagnitude;
+
+            if (i % 2 == 0)
+            {
+                // 이제 sideVector를 위치에 추가할 수 있습니다.
+                position += sideVector;
+
+            }
+            else
+            {
+                position -= sideVector;
+            }
+
+            // 나머지 코드...
+
+
+            Vector3 rotation = playerObject.transform.eulerAngles;
+            Vector3 scale = gameObject.transform.localScale;
+            worm.AddAnchorPoint(position, rotation, scale);
         }
-        else
-        {
-            virtualCamera2.m_Priority = 10;
-            virtualCamera1.Priority = 11;
-        }
+        worm.Length = 10f;
+        worm.LoopingStyle = AutoMoverLoopingStyle.repeat;
+        worm.CurveStyle = AutoMoverCurve.SplineThroughPoints;
+
+
+        worm.AddAnchorPoint(playerObject.transform.position, playerObject.transform.eulerAngles, playerObject.transform.localScale);
+
+
+
+        worm.Length = 10f;
+        worm.LoopingStyle = AutoMoverLoopingStyle.repeat;
+        worm.CurveStyle = AutoMoverCurve.SplineThroughPoints;
+
+        worm.StartMoving();
     }
 }

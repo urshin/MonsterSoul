@@ -82,7 +82,11 @@ public class CameraFollow : MonoBehaviour
         Vector2 mouseAxis = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")); // 마우스 움직임 얻기
         rotX += (mouseAxis.x * senstivity) * Time.deltaTime; // X 회전값 갱신
         rotY -= ((mouseAxis.y * senstivity) * Time.deltaTime); // Y 회전값 갱신
+       
         
+        rotY = 100f; //나중에 주석처리 해주기
+
+
         rotY = Mathf.Clamp(rotY, 0,180); // Y 회전값을 최소와 최대 값 사이로 제한 (-clampAxis.x를 사용하여 음수 값으로 제한)
 
         Quaternion localRotation = Quaternion.Euler(rotY, rotX, 0); // X와 Y 회전값을 이용한 회전 Quaternion 생성

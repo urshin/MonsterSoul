@@ -6,14 +6,16 @@ using UnityEngine.Timeline;
 
 public class InGameManager : MonoBehaviour
 {
+    public static InGameManager Instance;
+
     [SerializeField] TimelineAsset[] timelineAssets; //타임라인 모음집
     [SerializeField] GameObject CutScene; //Director가 들어있는 곳
     PlayableDirector Director; //다이렉터
     [SerializeField] GameObject SandWormNavTarget;
     [SerializeField] GameObject BossTrigger;
 
-
-
+    public GameObject player;
+    public GameObject CarmeraTarget;
     void Start()
     {
         Director = CutScene.GetComponent<PlayableDirector>();
@@ -23,6 +25,7 @@ public class InGameManager : MonoBehaviour
         Director.playableAsset = timelineAssets[FindScene("Opening")];
         Debug.Log(FindScene("Opening"));
         Director.Play();
+        player = GameObject.FindWithTag("Player");
     }
 
     int FindScene(string name) //timelineAssets내의 번째를 알려줌
@@ -68,7 +71,7 @@ public class InGameManager : MonoBehaviour
             {
                 Debug.Log("보스룸 입장");
                 GameManager.Instance.IsBossRoomEnter = true;
-               
+              
                 playSandWormOpening();
                 break;
             }
@@ -81,5 +84,6 @@ public class InGameManager : MonoBehaviour
         
     }
 
+  
 
 }

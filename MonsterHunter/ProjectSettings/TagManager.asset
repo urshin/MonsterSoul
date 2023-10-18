@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Weapon
   - WeaponPos_R
+  - EnemyUnderPos
+  - EnemyUpPos
   layers:
   - Default
   - TransparentFX
