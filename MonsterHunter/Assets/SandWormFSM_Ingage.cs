@@ -35,7 +35,7 @@ public class SandWormFSM_Ingage : StateMachineBehaviour
             if (distance > initialDistance)
             {
                 animator.SetBool("Ingage", false);
-                animator.SetBool("Idle", true);
+               animator.SetBool("Idle", true);
 
             }
         }

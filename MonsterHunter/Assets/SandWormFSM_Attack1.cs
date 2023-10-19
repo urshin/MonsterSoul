@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class SandWormFSM_Attack1 : StateMachineBehaviour
 {
-     SandWormBoss sandWorm; //샌드웜 참조
+     
      GameObject Player;
     AutoMover wormAutoMover;
      GameObject worm;
@@ -21,13 +21,13 @@ public class SandWormFSM_Attack1 : StateMachineBehaviour
     {
         
         animator.SetBool("Idle", false);
-        Player = GameObject.FindGameObjectWithTag("Player");
+        Player = SandWormBoss.Instance.Player;
         worm = animator.gameObject;
 
         wormAutoMover = animator.gameObject.AddComponent<AutoMover>();
         initialDistance = Vector3.Distance(worm.transform.position, Player.transform.position);
         Debug.Log("초기거리!"+initialDistance);
-        MakingSinMovement(3, 3, 2);
+        MakingSinMovement(2, 3, 3);
         PlayerOriginPos = Player.transform.position;
     }
     
@@ -35,14 +35,16 @@ public class SandWormFSM_Attack1 : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
        // float distance = Vector3.Distance(worm.transform.position, PlayerOriginPos);
-        float distance = Vector3.Distance(animator.transform.position, Player.transform.position);
+        float distance = Vector3.Distance(animator.transform.position, PlayerOriginPos);
         Debug.Log(distance);
         // 만약 초기 거리보다 커지면 Ingage 상태를 종료
-        if (distance <=1)
+        if (distance > initialDistance)
         {
-            
-            animator.SetBool("SWAttack1", false);
-            animator.SetBool("Idle", true);
+            Destroy(wormAutoMover);
+            SandWormBoss.Instance.StartPattern("Idle");
+
+            SandWormBoss.Instance.StopPattern("SWAttack1");
+           
 
         }
     }
@@ -50,7 +52,7 @@ public class SandWormFSM_Attack1 : StateMachineBehaviour
     // OnStateExit는 전환이 끝나고 상태 기계가 이 상태를 평가를 완료할 때 호출됩니다.
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        
     }
     private void MakingSinMovement(float _sideVectorMagnitude, int _HowMany, float _Speed)
     {
@@ -76,6 +78,7 @@ public class SandWormFSM_Attack1 : StateMachineBehaviour
             // 수직 벡터를 계산합니다. 이를 위해 x와 z 구성 요소를 교환하고 그 중 하나를 부호를 바꾸어 사용합니다.
             Vector3 sideVector = new Vector3(-directionToPlayer.z, 0, directionToPlayer.x).normalized;
 
+           
             // 필요한 경우 sideVector의 크기를 조절할 수 있습니다.
             float sideVectorMagnitude = _sideVectorMagnitude; // 필요한 크기에 맞게 이 값을 조절하세요.
             sideVector *= sideVectorMagnitude;
@@ -103,13 +106,7 @@ public class SandWormFSM_Attack1 : StateMachineBehaviour
         wormAutoMover.CurveStyle = AutoMoverCurve.SplineThroughPoints;
 
 
-        wormAutoMover.AddAnchorPoint(Player.transform.position, Player.transform.eulerAngles, Player.transform.localScale);
-
-
-
-        wormAutoMover.Length = 10f;
-        wormAutoMover.LoopingStyle = AutoMoverLoopingStyle.repeat;
-        wormAutoMover.CurveStyle = AutoMoverCurve.SplineThroughPoints;
+        wormAutoMover.AddAnchorPoint(new Vector3(0,-10,0)+ Player.transform.position +((Player.transform.position- worm.transform.position)*1.2f), Player.transform.eulerAngles, Player.transform.localScale);
 
         wormAutoMover.StartMoving();
         

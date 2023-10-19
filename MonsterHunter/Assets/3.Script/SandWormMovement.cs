@@ -40,7 +40,7 @@ public class SandWormMovement : MonoBehaviour
        // sandWorm.currentSandWormState = SandWorm.SandWormState.Opening;
         PositionAnchor.Clear();
         PositionAnchor = new List<Transform>();
-        Debug.Log(Position.transform.childCount);
+        //Debug.Log(Position.transform.childCount);
         for (int i = 0; i < Position.transform.childCount; i++)
         {
             PositionAnchor.Add(Position.transform.GetChild(i).gameObject.transform);
@@ -90,9 +90,10 @@ public class SandWormMovement : MonoBehaviour
     void Ingage()
     {
        SandWormBoss.Instance.StartPattern("Ingage");
-        //플레이어 움직임 가능
-      
-        anime.SetBool("InGame", true);
+        
+        SandWormBoss.Instance.StartPattern("InGame");
+        Destroy(CurrentAutoMover);
+      // anime.SetBool("InGame", true);
     }
 
     

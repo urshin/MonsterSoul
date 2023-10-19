@@ -16,6 +16,9 @@ public class InGameManager : MonoBehaviour
 
     public GameObject player;
     public GameObject CarmeraTarget;
+
+    public bool isCutScene;
+
     void Start()
     {
         Director = CutScene.GetComponent<PlayableDirector>();
