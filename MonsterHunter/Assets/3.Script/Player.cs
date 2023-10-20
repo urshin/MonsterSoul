@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -25,15 +26,18 @@ public class Player : MonoBehaviour
     public GameObject Weapon; // 무기 프리팹
     public GameObject CurrentWeapon; // 현재 장착된 무기를 저장할 변수
 
-   // public float PlayerTotalDamage;
+    public bool isPlayerBulling;
 
     [SerializeField] Transform WeaponPos_r; // 무기를 소환할 위치 (오른쪽 손 위치)
 
+    public Animator anime;
     private void Start()
     {
         SpawnWeapon(); // 무기를 생성하는 함수 호출
         WeaponScript = GameObject.FindGameObjectWithTag("Weapon"); // "Weapon" 태그를 가진 오브젝트를 찾아 WeaponScript 변수에 할당
-        CurrentWeapon = GameObject.FindGameObjectWithTag("Weapon"); // "Weapon" 태그를 가진 오브젝트를 현재 무기로 설정
+        CurrentWeapon = GameObject.FindGameObjectWithTag("Weapon"); // "Weapon" 태그를 가진 오브젝트를 현재 무기로 설정\
+        isPlayerBulling = false;//공격 당하지 않음
+        anime = GetComponentInChildren<Animator>();
     }
 
     void SpawnWeapon()
@@ -55,8 +59,53 @@ public class Player : MonoBehaviour
 
     public float PlayerTotalDamage()
     {
-        return WeaponScript.GetComponent<Weapon>().Attack + PlayerAttack + PlayerMotionDamage; 
+        return WeaponScript.GetComponent<Weapon>().Attack + PlayerAttack + PlayerMotionDamage;
     }
 
+    public bool IsDown =false;
+    private void OnTriggerEnter(Collider other)
+    {
+        //Debug.Log(other.gameObject.name);
+        if (SandWormBoss.Instance.IsAttacking && !isPlayerBulling)
+        {
+            if (other.gameObject.CompareTag("Enemy")|| other.gameObject.CompareTag("EnemyAttack"))
+            {
+                isPlayerBulling = true;
+                IsDown=true;
+                Debug.Log("공습경보");
+                PlayerHP -= SandWormBoss.Instance.SandWormAttackDamage;
+                
+
+            }
+        }
+    }
+
+    public void StartPattern(string name)
+    {
+        Debug.Log("패턴 시작" + name);
+        anime.SetBool(name, true);
+    }
+    public void StopPattern(string name)
+    {
+        Debug.Log("패턴 끝" + name);
+
+        anime.SetBool(name, false);
+    }
+
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+
+    //    if (SandWormBoss.Instance.IsAttacking && !isPlayerBulling)
+    //    {
+    //        if (collision.gameObject.CompareTag("Enemy"))
+    //        {
+    //            isPlayerBulling = true;
+    //            Debug.Log("공습경보");
+    //            PlayerHP -= SandWormBoss.Instance.SandWormAttackDamage;
+
+    //        }
+    //    }
+    //}
 
 }

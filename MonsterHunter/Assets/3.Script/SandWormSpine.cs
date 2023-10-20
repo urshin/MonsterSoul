@@ -6,6 +6,7 @@ public class SandWormSpine : MonoBehaviour
 {
     public SandWormBoss sandWorm; //»÷µå¿ú ÂüÁ¶
 
+
     private void OnTriggerEnter(Collider other)
     {
         if(!sandWorm.IsBulling)

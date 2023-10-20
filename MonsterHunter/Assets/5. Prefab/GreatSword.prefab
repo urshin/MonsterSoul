@@ -138,9 +138,9 @@ CapsuleCollider:
   m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.08
-  m_Height: 1
+  m_Height: 1.0607665
   m_Direction: 1
-  m_Center: {x: 0, y: 0.9, z: 0}
+  m_Center: {x: 0, y: 0.9303832, z: 0}
 --- !u!54 &1571938600234760253
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -181,3 +181,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Attack: 2
+  SandWormEffect:
+  - {fileID: 1803324797696400, guid: b6445265c47fd4d4fa8e84418e5d90cd, type: 3}
+  - {fileID: 1165458216055158, guid: eeff7fc95b847e24ea570517df74d06d, type: 3}

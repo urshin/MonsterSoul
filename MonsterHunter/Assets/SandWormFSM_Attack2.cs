@@ -4,6 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//아래로 잠수, 플레이어 포지션으로 돌격
+
+
 public class SandWormFSM_Attack2 : StateMachineBehaviour
 {
     AutoMover wormAutoMover;
@@ -29,8 +32,9 @@ public class SandWormFSM_Attack2 : StateMachineBehaviour
         UnderPlayer = Player.transform.position + new Vector3(0, -50, 0);
         UpPlayer = Player.transform.position + new Vector3(0, 50, 0);
         Startpos = animator.transform.position + new Vector3(0, 20, 0);
-       SandWormBoss.Instance.MakingSinMovement(animator.gameObject, 40, PatternTime, Startpos, UnderPlayer, UpPlayer,SandWormBoss.Instance. UnderSetPosition.position+new Vector3(0,-50,0),1);
-
+        SandWormBoss.Instance.IsAttacking = true;
+       SandWormBoss.Instance.MakingSinMovement(animator.gameObject, 40, PatternTime, Startpos, UnderPlayer, UpPlayer,SandWormBoss.Instance. UnderSetPosition.position+new Vector3(0,-30,0),0,"", AutoMoverLoopingStyle.loop);
+        wormAutoMover = animator.GetComponent<AutoMover>();
 
     }
 
@@ -41,7 +45,12 @@ public class SandWormFSM_Attack2 : StateMachineBehaviour
        timer += Time.deltaTime;
         if(timer>= PatternTime)
         {
-            Destroy(wormAutoMover);
+            if (wormAutoMover != null)
+            {
+
+                Destroy(wormAutoMover);
+            }
+            SandWormBoss.Instance.IsAttacking = false;
             SandWormBoss.Instance.StartPattern("Idle");
 
             SandWormBoss.Instance.StopPattern("SWAttack2");

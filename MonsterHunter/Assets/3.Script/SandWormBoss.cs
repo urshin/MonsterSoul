@@ -30,11 +30,10 @@ public class SandWormBoss : MonoBehaviour
     public float SandWormAttackDamage;
     public float SandWormDef; //방어력
 
-    public bool changeState = true;
 
     public bool IsBulling = false; //플레이어에게 공격 받고 있는지
 
-
+    public bool IsAttacking = false; //샌드웜 공격 상태인지?
 
     [Header("GetInfo")]
     public GameObject Player;
@@ -131,12 +130,15 @@ public class SandWormBoss : MonoBehaviour
 
 
     //오토 무브 함수
-    public void MakingSinMovement(GameObject thing, float _sideVectorMagnitude, float _Speed, Vector3 StartPos, Vector3 WaveStart, Vector3 WaveEnd, Vector3 endpos, uint HowManytime)
+    public void MakingSinMovement(GameObject thing, float _sideVectorMagnitude, float _Speed, Vector3 StartPos, Vector3 WaveStart, Vector3 WaveEnd, Vector3 endpos, float StopTime, string circle, AutoMoverLoopingStyle loopstyle)
     {
 
         int many = (int)Vector3.Distance(WaveStart, WaveEnd);
         int Count = many / 3;
-        
+        if(circle == "circle")
+        {
+            Count = 1;
+        }
         wormAutoMover = thing.AddComponent<AutoMover>();
         wormAutoMover.RunOnStart = false;
 
@@ -186,9 +188,23 @@ public class SandWormBoss : MonoBehaviour
             wormAutoMover.AddAnchorPoint(position, rotation, scale);
         }
         wormAutoMover.Length = _Speed;
+        if(loopstyle == AutoMoverLoopingStyle.bounce)
+        {
+        wormAutoMover.LoopingStyle = AutoMoverLoopingStyle.bounce;
+
+        }
+        if(loopstyle == AutoMoverLoopingStyle.repeat)
+        {
+        wormAutoMover.LoopingStyle = AutoMoverLoopingStyle.repeat;
+
+        }
+        if(loopstyle == AutoMoverLoopingStyle.loop)
+        {
         wormAutoMover.LoopingStyle = AutoMoverLoopingStyle.loop;
+
+        }
         
-        wormAutoMover.StopAfter =HowManytime; //한번만 실행하고 멈추게함
+        wormAutoMover.StopAfter =1; //한번만 실행하고 멈추게함
         wormAutoMover.CurveStyle = AutoMoverCurve.SplineThroughPoints;
 
 
@@ -196,6 +212,18 @@ public class SandWormBoss : MonoBehaviour
 
         wormAutoMover.StartMoving();
 
+        if(StopTime > 0)
+        {
+
+        StartCoroutine(StopMoving());
+        }
+
+        IEnumerator StopMoving()
+        {
+            yield return new WaitForSeconds(StopTime);
+            wormAutoMover.Pause();
+        }
     }
+
 
 }

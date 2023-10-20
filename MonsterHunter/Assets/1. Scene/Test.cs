@@ -11,28 +11,67 @@ using UnityEngine;
 public class Test : MonoBehaviour
 {
     //몇초에 한번씩 플레이어를 찾고 해당 방향으로 브레스(아님 뭔가 던지기)
-    
-    
+    GameObject SandWormBody;
+    [SerializeField] GameObject head;
+
+    [SerializeField] GameObject[] Rock;
+
+    float radius;
+    private float timerDuration = 2.5f; // 타이머의 기간(초)
+    private float timeRemaining; // 남은 시간(초)
+    private float lastTimeChecked; // 마지막으로 시간을 체크한 시간
+    private float outputInterval = 0.3f; // 출력 간격(초)
     void Start()
     {
-        GoUp();
-        Invoke("LookPlayer", 1f);
-    }
-    void GoUp()
-    {
-        SandWormBoss.Instance.Goto(gameObject, gameObject.transform.position, gameObject.transform.position + new Vector3(0, 5, 0),6);
+        radius = 24;
+        SandWormBoss.Instance.MakingSinMovement(gameObject, 1, 4,transform.position + new Vector3(radius*2, 0, 0), transform.position + new Vector3(0, radius, 0), transform.position + new Vector3(-radius*2, 0, 0), transform.position + new Vector3(0, -100, 0), 3.8f,"circle",AutoMoverLoopingStyle.repeat);
+        OktoShootingFire = true;
+
+
+        timeRemaining = timerDuration;
+        lastTimeChecked = Time.time;
+
 
     }
-    void LookPlayer()
+    bool OktoShootingFire;
+    float timer = 0;    
+    void ShootingFire()
     {
-        SandWormBoss.Instance.Goto(gameObject,transform.position,transform.position+((SandWormBoss.Instance.Player.transform.position - transform.position)*0.2f), 4);
-       
-
+        for(int i = 0; i < Rock.Length; i++)
+        {
+            GameObject rock = Instantiate(Rock[i], transform.position, Quaternion.identity);
+            Destroy(rock,5f);
+        }
     }
+    
 
     private void Update()
     {
-   
+        float elapsedTime = Time.time - lastTimeChecked;
+
+        if (elapsedTime >= outputInterval && OktoShootingFire)
+        {
+            ShootingFire();
+            lastTimeChecked = Time.time;
+        }
+
+        if (timeRemaining > 0)
+        {
+            timeRemaining -= Time.deltaTime;
+
+            if (timeRemaining <= 0.0f)
+            {
+                OktoShootingFire = false;
+                enabled = false; // 업데이트를 중지합니다.
+            }
+        }
+
+
+       
+       
+
+
+
     }
 
 
@@ -42,7 +81,6 @@ public class Test : MonoBehaviour
 
 
 }
-
 
 
 

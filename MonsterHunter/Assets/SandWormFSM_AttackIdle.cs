@@ -10,7 +10,7 @@ public class SandWormFSM_AttackIdle : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         SandWormBoss.Instance.Goto(animator.gameObject, animator.transform.position, SandWormBoss.Instance.UnderSetPosition.position, 40f);
-        
+        //timer= 0;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

@@ -33,7 +33,7 @@ public class SandWormFSM_Idle : StateMachineBehaviour
 
             animator.gameObject.transform.position = SandWormBoss.Instance.UnderSetPosition.position;
             SandWormBoss.Instance.Goto(animator.gameObject, SandWormBoss.Instance.SandWormLastPosition.position, SandWormBoss.Instance.SetPosition.position, 10f);
-
+            SandWormBoss.Instance.IsAttacking= false;
 
 
             timer = 0;
@@ -65,7 +65,7 @@ public class SandWormFSM_Idle : StateMachineBehaviour
             }
 
             //나중에 랜덤 함수 돌리기
-            int randomPattern = Random.Range(0, 2); 
+            int randomPattern = Random.Range(0, 3); 
             switch (randomPattern)
             {
                 case 0:
@@ -73,6 +73,9 @@ public class SandWormFSM_Idle : StateMachineBehaviour
                     break;
                 case 1:
                     animator.SetBool("SWAttack2", true);
+                    break;
+                case 2:
+                    animator.SetBool("SWAttack3", true);
                     break;
             }
 

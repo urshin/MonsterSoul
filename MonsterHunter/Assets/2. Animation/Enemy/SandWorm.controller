@@ -21,10 +21,10 @@ AnimatorStateMachine:
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: -5470564951958280912}
-    m_Position: {x: 490, y: 230, z: 0}
+    m_Position: {x: 420, y: 230, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: 4516337057935540818}
-    m_Position: {x: 570, y: 160, z: 0}
+    m_Position: {x: 590, y: 170, z: 0}
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
@@ -55,7 +55,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: New State
+  m_Name: SandWormAttack3
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -423,55 +423,55 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Ingage
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Idle
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: InGame
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: AttackTime
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: HP
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: SWAttack1
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: SWAttack2
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: SWAttack3
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -575,6 +575,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dabdc1ac9be26e94ead646c5371f9cdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  head: {fileID: 0}
+  Rock:
+  - {fileID: 1829220754290107407, guid: 3f00687769a84c844bf92e3a4f7485ed, type: 3}
+  - {fileID: 5362545204116074138, guid: 13889f87db748e340b98c630fe924940, type: 3}
+  - {fileID: 3873230478427373002, guid: 77811748fdb054d45b31d7036a24b0ec, type: 3}
+  - {fileID: 2663207770530487322, guid: 1833904fa3d51e840abf4a5cd5211f75, type: 3}
+  - {fileID: 866750779669981039, guid: 25b288de0fe34b046a1328f0bb02f758, type: 3}
+  - {fileID: 5937262254096345744, guid: fd87b0014bd4169438c7c51b1b87397b, type: 3}
+  - {fileID: 6658158158675041895, guid: 6d349cc3580c25446848afed97424501, type: 3}
+  - {fileID: 6405961951673867805, guid: f67ff84b065b2c348acba90c0718ae5d, type: 3}
+  - {fileID: 6647403632691851853, guid: 9590e484158cba54fbbb1742c67d7234, type: 3}
+  - {fileID: 3396399047845939060, guid: 01d6360233e3d3b44a5b80c3aeea6f24, type: 3}
+  - {fileID: 9185915804374408602, guid: 0fb1d0db1bf397549b9c1e8dc4403863, type: 3}
+  - {fileID: 7274723177430583335, guid: 8c4fa1327c70aba4b939e4786254a5bc, type: 3}
+  - {fileID: 7576958342133812825, guid: 7b6a1127bd28135489e33346f11c43ef, type: 3}
+  - {fileID: 7292820943492260439, guid: efe350fc59f73394db1d8ea6d681b7d7, type: 3}
+  - {fileID: 7326482640356879887, guid: 5d410491a2806f346b66440a5c6c876e, type: 3}
+  - {fileID: 2301478759508953502, guid: 79382d78ba24c4540b3bea731a5303fa, type: 3}
+  - {fileID: 3602098783845798236, guid: e77e36b0ff73fad4baf8c2fd67d84031, type: 3}
+  - {fileID: 9140849235277561749, guid: cdf167f88d6018947910cc3138029883, type: 3}
+  - {fileID: 7479556758242692590, guid: 0ad5c7608c9455849923fe6411c51700, type: 3}
+  - {fileID: 2183223094365451863, guid: b6ea0a228a8746446ac10e4999e05bda, type: 3}
 --- !u!1102 &3885917697195941049
 AnimatorState:
   serializedVersion: 6

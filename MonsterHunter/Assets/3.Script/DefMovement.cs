@@ -49,7 +49,26 @@ public class DefMovement : MonoBehaviour
     public void Update()
     {
         GetInput(); // 입력 받기
-        PlayerMovement(); // 플레이어 이동
+
+
+        if (Player.Instance.isPlayerBulling) //공격받는 상태
+        {
+           if( Player.Instance.IsDown)
+            {
+            anim.SetTrigger("Down");
+                Player.Instance.IsDown = false;
+            }
+            
+
+        }
+        else
+        {
+            PlayerMovement(); // 플레이어 이동
+
+        }
+
+
+
         if (!lockMovement) PlayerRotation(); // 이동이 잠긴 상태가 아니면 플레이어 회전
     }
 
@@ -157,10 +176,10 @@ public class DefMovement : MonoBehaviour
 
         //while (Vector3.Distance(transform.position, endPos) > 1f)
         //{
-            // 계산된 목표 지점 방향으로 이동
-            Vector3 moveDirection = (endPos - transform.position).normalized;
-            controller.Move(moveDirection * (moveSpeed + (moveSpeed / 2)) * Time.deltaTime);
-            yield return null;
+        // 계산된 목표 지점 방향으로 이동
+        Vector3 moveDirection = (endPos - transform.position).normalized;
+        controller.Move(moveDirection * (moveSpeed + (moveSpeed / 2)) * Time.deltaTime);
+        yield return null;
         //}
     }
 

@@ -9,6 +9,9 @@ TagManager:
   - WeaponPos_R
   - EnemyUnderPos
   - EnemyUpPos
+  - FxTemporaire
+  - EnemyAttack
+  - Ground
   layers:
   - Default
   - TransparentFX

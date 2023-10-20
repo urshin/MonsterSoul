@@ -17,7 +17,8 @@ public class SandWormFSM_Ingage : StateMachineBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         direction = (player.position - animator.transform.position).normalized;
         initialDistance = Vector3.Distance(animator.transform.position, player.position);
-         
+        SandWormBoss.Instance.IsAttacking = true;
+
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -34,6 +35,7 @@ public class SandWormFSM_Ingage : StateMachineBehaviour
             // 만약 초기 거리보다 커지면 Ingage 상태를 종료
             if (distance > initialDistance)
             {
+                SandWormBoss.Instance.IsAttacking = false;
                 animator.SetBool("Ingage", false);
                animator.SetBool("Idle", true);
 
