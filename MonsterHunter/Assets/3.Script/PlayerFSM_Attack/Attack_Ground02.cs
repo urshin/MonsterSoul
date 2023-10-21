@@ -8,7 +8,7 @@ public class Attack_Ground02 : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 
-        Debug.Log("Attack_Ground02 on!");
+        //Debug.Log("Attack_Ground02 on!");
         Player.Instance.PlayerMotionDamage = 10;
 
     }

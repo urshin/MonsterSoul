@@ -26,7 +26,7 @@ public class InGameManager : MonoBehaviour
         Director.enabled = true;
         //ø¿«¡¥◊
         Director.playableAsset = timelineAssets[FindScene("Opening")];
-        Debug.Log(FindScene("Opening"));
+        //Debug.Log(FindScene("Opening"));
         Director.Play();
         player = GameObject.FindWithTag("Player");
     }
@@ -72,7 +72,7 @@ public class InGameManager : MonoBehaviour
         {
             if (col.CompareTag("Player"))
             {
-                Debug.Log("∫∏Ω∫∑Î ¿‘¿Â");
+               // Debug.Log("∫∏Ω∫∑Î ¿‘¿Â");
                 GameManager.Instance.IsBossRoomEnter = true;
               
                 playSandWormOpening();

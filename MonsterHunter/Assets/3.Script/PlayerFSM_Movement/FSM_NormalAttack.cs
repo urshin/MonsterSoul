@@ -44,7 +44,7 @@ public class FSM_NormalAttack : StateMachineBehaviour
     override public void OnStateMachineEnter(Animator animator, int stateMachinePathHash)
     {
         animator.SetBool("IsAttack", true);
-        Debug.Log("공격상태11111111111");
+       // Debug.Log("공격상태11111111111");
         DefMovement.Instance.Nowspeed = 0;
         DefMovement.Instance.dir = DefMovement.Instance.transform.forward;
     }
@@ -53,7 +53,7 @@ public class FSM_NormalAttack : StateMachineBehaviour
     override public void OnStateMachineExit(Animator animator, int stateMachinePathHash)
     {
         Player.Instance.PlayerMotionDamage = 0;
-        Debug.Log("공격아님222222222222");
+       // Debug.Log("공격아님222222222222");
         //movement.Nowspeed = movement.moveSpeed;
         animator.SetBool("IsAttack", false);
         animator.SetBool("AbleCombo", false);

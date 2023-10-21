@@ -22,13 +22,29 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);// æ¿¿Ã πŸ≤ÓæÓµµ ªË¡¶ æ»µ 
         }
     }
-
+    public enum Graphic
+    {
+        Low,
+        Middle,
+        High,
+    }
+    
     public bool IsBossRoomEnter;
 
-    // public PlayerState PlayerCurrentState;
+
+    [Header("Player Info")]
+    public GameObject Weapon;
 
 
 
-
-
+    [Header("Setting")]
+    public Graphic InGameGraphic;
+    public float MouseSensitivity;
+    public float Sound_Master;
+    public float Sound_BGM;
+    public float Sound_Effect;
+    public List<GameObject> PlayerCharactor = new List<GameObject>();
+    public GameObject CurrentPlayerCharactor;
+    public List<GameObject> WeaponList = new List<GameObject>();
+    public GameObject CurrentWeapon;
 }

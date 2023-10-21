@@ -8,7 +8,7 @@ public class Attack04 : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 
-        Debug.Log("Attack04 on!");
+       // Debug.Log("Attack04 on!");
         Player.Instance.PlayerMotionDamage = 8;
 
     }
