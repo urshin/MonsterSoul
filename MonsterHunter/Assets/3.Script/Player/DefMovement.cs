@@ -6,7 +6,7 @@ using UnityEngine;
 public class DefMovement : MonoBehaviour
 {
     public static DefMovement Instance;
-
+    GameManager GM;
     // Awake 메소드는 게임 오브젝트가 활성화될 때 호출됩니다.
     public void Awake()
     {
@@ -37,13 +37,30 @@ public class DefMovement : MonoBehaviour
 
     public bool lockMovement; // 이동 잠금 여부
 
+
+    
     void Start()
     {
-        // anim = GetComponent<Animator>(); // 애니메이터 컴포넌트 가져오기
-        anim = GetComponentInChildren<Animator>(); // 애니메이터 컴포넌트 가져오기
+        GM = GameManager.Instance;
+        Invoke("LateStart",1f);
+        
+    }
+
+
+    void LateStart()
+    {
+        anim = Player.Instance.PlayerAvatar.GetComponent<Animator>();
         controller = GetComponent<CharacterController>(); // 캐릭터 컨트롤러 컴포넌트 가져오기
         cam = Camera.main.transform; // 메인 카메라의 Transform 가져오기
+        InitializedPlayerInfo();
+
+    }
+    void InitializedPlayerInfo()
+    {
+        moveSpeed = GM.PlayerSpeed;
         Nowspeed = moveSpeed; // 이동 속도 초기화
+        JumpSpeed = GM.PlayerJumpPower;
+        RunningSpeed = moveSpeed * 1.4f;
     }
 
     public void Update()

@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/1. Scene/Ready.unity
+    guid: 18b75c3fe8a07214ba457d6cd5108c8a
+  - enabled: 1
+    path: Assets/1. Scene/Sand Worm.unity
+    guid: f8210770cc0e29a4383d2c38c73c9af3
   m_configObjects: {}

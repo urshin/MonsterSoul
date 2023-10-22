@@ -12,7 +12,8 @@ public class AnimationEvent : MonoBehaviour
 
     private void Start()
     {
-        anim = GetComponent<Animator>();
+        //anim = GetComponent<Animator>();
+        anim = Player.Instance.PlayerAvatar.GetComponent<Animator>();
         ComboPossible = false;
     }
 

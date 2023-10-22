@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6473488566343701684}
   m_Layer: 0
   m_Name: Sword_Balmung
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2887441958842457419}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 1314615684913047781}
   m_Father: {fileID: 0}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!54 &8036189832128757108
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -58,7 +58,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83ee535e25420ed4696a0682cbf905d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Attack: 2
+  Attack: 90
   SandWormEffect:
   - {fileID: 1803324797696400, guid: b6445265c47fd4d4fa8e84418e5d90cd, type: 3}
   - {fileID: 1165458216055158, guid: eeff7fc95b847e24ea570517df74d06d, type: 3}

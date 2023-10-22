@@ -25,9 +25,8 @@ public class InGameManager : MonoBehaviour
 
         Director.enabled = true;
         //¿ÀÇÁ´×
-        Director.playableAsset = timelineAssets[FindScene("Opening")];
-        //Debug.Log(FindScene("Opening"));
-        Director.Play();
+        Invoke("PlayOpening", 0.2f);
+        //PlayOpening();
         player = GameObject.FindWithTag("Player");
     }
 
@@ -86,7 +85,12 @@ public class InGameManager : MonoBehaviour
         Director.Play();
         
     }
+    void PlayOpening()
+    {
+        Director.playableAsset = timelineAssets[FindScene("Opening")];
+        Director.Play();
 
-  
+    }
+
 
 }

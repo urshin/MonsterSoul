@@ -32,7 +32,6 @@ public class Player_Button : MonoBehaviour
         switch (gameObject.name)
         {
             case "Back":
-                Debug.Log("Back");
                 lobby.SetOff(lobby.Player);
                 lobby.SetOn(lobby.First);
                 break;
@@ -70,6 +69,7 @@ public class Player_Button : MonoBehaviour
                 break;
 
         }
+        //SpawnCharactor(gameObject.name);
     }
    
     
@@ -86,9 +86,9 @@ public class Player_Button : MonoBehaviour
                 GameObject Player = Instantiate(job, PlayerSpawnPos.position, Quaternion.Euler(0,90,0));
                 Player.GetComponent<Animator>().runtimeAnimatorController = controller;
                 LobbyManager.Instance.PlayerCharactor = Player;
-                GameManager.Instance.CurrentPlayerCharactor= LobbyManager.Instance.PlayerCharactor;
+                GameManager.Instance.CurrentPlayerCharactor= job;
             }
         }
-
+        DataManager.Instance.InputPlayerInfo(GameManager.Instance.CurrentPlayerCharactor.name);
     }
 }

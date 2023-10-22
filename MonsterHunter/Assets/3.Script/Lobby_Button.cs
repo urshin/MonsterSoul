@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Lobby_Button : MonoBehaviour
@@ -20,7 +21,7 @@ public class Lobby_Button : MonoBehaviour
         switch (gameObject.name)
         {
             case "Start":
-                //체인지 씬
+                ChangeScene();
                 break;
             case "Player":
                 lobby.SetOff(lobby.First);
@@ -45,4 +46,30 @@ public class Lobby_Button : MonoBehaviour
 
         }
     }
+
+    void ChangeScene()
+    {
+       if(GameManager.Instance.CurrentPlayerCharactor!= null&& GameManager.Instance.CurrentWeapon !=null && GameManager.Instance.CurrentBoss !=null)
+        {
+            string name = GameManager.Instance.CurrentBoss.name.Trim();
+        SceneManager.LoadScene(name);
+
+        }
+       else
+        {
+            if(GameManager.Instance.CurrentPlayerCharactor == null)
+            {
+                Debug.Log("캐릭터 선택 필요");
+            }
+            if (GameManager.Instance.CurrentWeapon == null)
+            {
+                Debug.Log("무기 선택 필요");
+            }
+            if (GameManager.Instance.CurrentBoss == null)
+            {
+                Debug.Log("보스 선택 필요");
+            }
+        }
+    }
+
 }

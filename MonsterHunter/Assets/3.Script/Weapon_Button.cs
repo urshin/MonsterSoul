@@ -48,7 +48,7 @@ public class Weapon_Button : MonoBehaviour
                 lobby.PlayerWeapon = Weapon;
                 Weapon.GetComponent<Rigidbody>().useGravity = false;
                 Weapon.GetComponent<CapsuleCollider>().isTrigger= true;
-                GameManager.Instance.CurrentWeapon = lobby.PlayerWeapon;
+                GameManager.Instance.CurrentWeapon = WeaponName;
             }
         }
     }

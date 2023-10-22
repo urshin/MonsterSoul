@@ -16,10 +16,12 @@ public class Player : MonoBehaviour
             DontDestroyOnLoad(gameObject); // 씬 전환 시에도 플레이어 게임 오브젝트가 파괴되지 않도록 설정
         }
     }
+    GameManager GM;
 
     public float PlayerHP; // 플레이어의 체력
     public float PlayerSpeed; // 플레이어의 이동 속도
     public float PlayerAttack; // 플레이어의 공격력
+    public float PlayerrStamina; // 플레이어의 스테미너
     public float PlayerMotionDamage; // 플레이어의 모션 데미지
     GameObject WeaponScript; // 무기 스크립트를 저장할 변수
 
@@ -28,21 +30,46 @@ public class Player : MonoBehaviour
 
     public bool isPlayerBulling;
 
-    [SerializeField] Transform WeaponPos_r; // 무기를 소환할 위치 (오른쪽 손 위치)
+    [SerializeField] GameObject WeaponPos_r; // 무기를 소환할 위치 (오른쪽 손 위치)
+    public GameObject PlayerAvatar; //아바타
 
     public Animator anime;
     private void Start()
     {
+        GM = GameManager.Instance;
+        InitializedPlayerInfo();
+        Invoke("LateStart", 0.1f);
+        isPlayerBulling = false;//공격 당하지 않음
+    }
+
+
+    void LateStart()
+    {
+        SpawnPlayerAvatar();
         SpawnWeapon(); // 무기를 생성하는 함수 호출
         WeaponScript = GameObject.FindGameObjectWithTag("Weapon"); // "Weapon" 태그를 가진 오브젝트를 찾아 WeaponScript 변수에 할당
         CurrentWeapon = GameObject.FindGameObjectWithTag("Weapon"); // "Weapon" 태그를 가진 오브젝트를 현재 무기로 설정\
-        isPlayerBulling = false;//공격 당하지 않음
-        anime = GetComponentInChildren<Animator>();
+    }
+    void InitializedPlayerInfo()
+    {
+        PlayerHP = GM.PlayerHp;
+        PlayerSpeed = GM.PlayerSpeed;
+        PlayerAttack = GM.PlayerAttack;
+        PlayerrStamina = GM.PlayerStamina;
     }
 
+    void SpawnPlayerAvatar()
+    {
+        PlayerAvatar = Instantiate(GameManager.Instance.CurrentPlayerCharactor, gameObject.transform);
+        // 부모-자식 관계 설정
+        PlayerAvatar.transform.parent = gameObject.transform;
+        PlayerAvatar.GetComponent<Animator>().runtimeAnimatorController = GameManager.Instance.Worrior;
+        anime = PlayerAvatar.GetComponent<Animator>();
+    }
     void SpawnWeapon()
     {
-        Instantiate(Weapon, WeaponPos_r); // Weapon 프리팹을 WeaponPos_r 위치에 생성
+        WeaponPos_r = GameObject.FindGameObjectWithTag("WeaponPos_R");
+        Instantiate(GameManager.Instance.CurrentWeapon, WeaponPos_r.transform); // Weapon 프리팹을 WeaponPos_r 위치에 생성
     }
 
     void DestroyWeapon()

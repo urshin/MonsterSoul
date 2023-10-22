@@ -45,7 +45,7 @@ public class LobbyManager : MonoBehaviour
     public GameObject PlayerCharactor;
     public GameObject PlayerWeapon;
     public GameObject PlayerWeaponSpawnPos;
-  
+    
 
 
     private void Start()

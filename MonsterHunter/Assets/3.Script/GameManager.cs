@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 //public enum PlayerState
@@ -30,11 +31,19 @@ public class GameManager : MonoBehaviour
     }
     
     public bool IsBossRoomEnter;
-
+    [Header("GameData")]
+    public GameObject CurrentPlayerCharactor;
+    public GameObject CurrentWeapon;
+    public GameObject CurrentBoss;
 
     [Header("Player Info")]
-    public GameObject Weapon;
-
+    //public GameObject Weapon;
+    public float PlayerHp;
+    public float PlayerSpeed;
+    public float PlayerAttack;
+    public float PlayerStamina;
+    public float PlayerJumpPower;
+    public float PlayerMaximumItem;
 
 
     [Header("Setting")]
@@ -44,7 +53,10 @@ public class GameManager : MonoBehaviour
     public float Sound_BGM;
     public float Sound_Effect;
     public List<GameObject> PlayerCharactor = new List<GameObject>();
-    public GameObject CurrentPlayerCharactor;
     public List<GameObject> WeaponList = new List<GameObject>();
-    public GameObject CurrentWeapon;
+    public List<GameObject> BossList = new List<GameObject>();
+
+    public AnimatorController Worrior;
+    
+
 }

@@ -1,0 +1,55 @@
+Assassin
+PlayerHp:90
+PlayerSpeed:7
+PlayerAttack:20
+PlayerStamina:70
+PlayerMaximumItem:3
+JumpPower:8
+
+Barbarian
+PlayerHp: 140
+PlayerSpeed: 3
+PlayerAttack: 20
+PlayerStamina: 100
+PlayerMaximumItem: 10
+JumpPower: 15
+
+Cleric
+PlayerHp: 110
+PlayerSpeed: 5
+PlayerAttack: 12
+PlayerStamina: 85
+PlayerMaximumItem: 5
+JumpPower: 10
+
+Mage
+PlayerHp: 100
+PlayerSpeed: 6
+PlayerAttack: 12
+PlayerStamina: 75
+PlayerMaximumItem: 5
+JumpPower: 12
+
+Necromancer
+PlayerHp: 95
+PlayerSpeed: 4
+PlayerAttack: 15
+PlayerStamina: 80
+PlayerMaximumItem: 4
+JumpPower: 10
+
+Paladin
+PlayerHp: 130
+PlayerSpeed: 4
+PlayerAttack: 18
+PlayerStamina: 95
+PlayerMaximumItem: 8
+JumpPower: 12
+
+Warrior
+PlayerHp: 120
+PlayerSpeed: 5
+PlayerAttack: 15
+PlayerStamina: 90
+PlayerMaximumItem: 7
+JumpPower: 10
