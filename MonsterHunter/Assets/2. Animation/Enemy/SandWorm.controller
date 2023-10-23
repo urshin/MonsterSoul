@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  WaitingTime: 5
+  WaitingTime: 9
 --- !u!1102 &-7814702529950491039
 AnimatorState:
   serializedVersion: 6
@@ -340,6 +340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3160794f41d64fa438df43574f7fb212, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roarInterval: 0.5
 --- !u!114 &-1449749461601231437
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -575,7 +576,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dabdc1ac9be26e94ead646c5371f9cdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  head: {fileID: 0}
   Rock:
   - {fileID: 1829220754290107407, guid: 3f00687769a84c844bf92e3a4f7485ed, type: 3}
   - {fileID: 5362545204116074138, guid: 13889f87db748e340b98c630fe924940, type: 3}

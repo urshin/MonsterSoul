@@ -10,10 +10,12 @@ public class Attack03 : StateMachineBehaviour
 
         //Debug.Log("Attack03 on!");
         Player.Instance.PlayerMotionDamage = 5;
+        SoundManager.Instance.EffectLatePlay("axe3", 0.5f);
 
     }
 
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
+    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit call
+    // s
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 

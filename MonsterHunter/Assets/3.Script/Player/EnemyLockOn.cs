@@ -32,35 +32,48 @@ public class EnemyLockOn : MonoBehaviour
 
     void Start()
     {
+        Invoke("LateStart", 0.1f);
+    }
+
+    void LateStart()
+    {
         defMovement = GetComponent<DefMovement>();
-        anim = GetComponentInChildren<Animator>();
+        // anim = GetComponentInChildren<Animator>();
+        //anim = Player.Instance.anime;
         cam = Camera.main.transform;
         lockOnCanvas.gameObject.SetActive(false); // 락온 캔버스 비활성화
     }
-  
-    
+
     void Update()
     {
-        camFollow.lockedTarget = enemyLocked;
-        defMovement.lockMovement = enemyLocked;
-
-        if (Input.GetKeyDown(KeyCode.Mouse2))
+        if(anim ==null)
         {
-            if (currentTarget)
+            anim = Player.Instance.anime;  
+        }
+        if (!GameManager.Instance.IsLoading)
+        {
+
+            camFollow.lockedTarget = enemyLocked;
+            defMovement.lockMovement = enemyLocked;
+
+            if (Input.GetKeyDown(KeyCode.Mouse2))
             {
-                // 이미 타겟이 있는 경우, 리셋.
-                ResetTarget();
-                return;
+                if (currentTarget)
+                {
+                    // 이미 타겟이 있는 경우, 리셋.
+                    ResetTarget();
+                    return;
+                }
+
+                if (currentTarget = ScanNearBy()) FoundTarget(); // 주변을 스캔하여 타겟을 찾음
+                else ResetTarget(); // 타겟을 찾지 못한 경우 리셋
             }
 
-            if (currentTarget = ScanNearBy()) FoundTarget(); // 주변을 스캔하여 타겟을 찾음
-            else ResetTarget(); // 타겟을 찾지 못한 경우 리셋
-        }
-
-        if (enemyLocked)
-        {
-            if (!TargetOnRange()) ResetTarget(); // 타겟이 범위를 벗어난 경우 리셋
-            LookAtTarget(); // 타겟을 바라봄
+            if (enemyLocked)
+            {
+                if (!TargetOnRange()) ResetTarget(); // 타겟이 범위를 벗어난 경우 리셋
+                LookAtTarget(); // 타겟을 바라봄
+            }
         }
     }
 
@@ -70,8 +83,8 @@ public class EnemyLockOn : MonoBehaviour
         cinemachineAnimator.Play("TargetCamera"); // 시네머신 애니메이터의 TargetCamera 애니메이션 재생
         enemyLocked = true; // 적 타겟 잠금 상태로 변경
         anim.SetBool("LookOn", true);
-       
-        
+
+
     }
 
     void ResetTarget()
@@ -113,7 +126,7 @@ public class EnemyLockOn : MonoBehaviour
         float h = h1 * h2;
         float half_h = (h / 2) / 2;
         currentYOffset = h - half_h;
-      //  currentYOffset =  half_h;
+        //  currentYOffset =  half_h;
 
         //if (zeroVert_Look && currentYOffset > 1.6f && currentYOffset < 1.6f * 3)
         //    currentYOffset = 1.6f;

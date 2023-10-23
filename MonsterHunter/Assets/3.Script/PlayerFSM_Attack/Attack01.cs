@@ -10,9 +10,10 @@ public class Attack01 : StateMachineBehaviour
 
         //Debug.Log("Attack1 on!");
         Player.Instance.PlayerMotionDamage = 2;
-
+        SoundManager.Instance.EffectLatePlay("axe1",0.5f);
     }
 
+   
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

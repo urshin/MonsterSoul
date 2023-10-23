@@ -10,6 +10,7 @@ public class Attack_Upper01: StateMachineBehaviour
 
         //Debug.Log("Attack_Upper01 on!");
         Player.Instance.PlayerMotionDamage = 8;
+        SoundManager.Instance.EffectLatePlay("axeUpper", 0.5f);
 
     }
 

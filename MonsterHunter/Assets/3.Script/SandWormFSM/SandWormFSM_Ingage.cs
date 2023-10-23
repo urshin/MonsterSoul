@@ -18,6 +18,7 @@ public class SandWormFSM_Ingage : StateMachineBehaviour
         direction = (player.position - animator.transform.position).normalized;
         initialDistance = Vector3.Distance(animator.transform.position, player.position);
         SandWormBoss.Instance.IsAttacking = true;
+        SoundManager.Instance.PlayEffect("Roar");
 
     }
 

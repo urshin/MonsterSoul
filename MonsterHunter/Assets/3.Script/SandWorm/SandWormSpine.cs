@@ -11,13 +11,33 @@ public class SandWormSpine : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("Weapon"))
+        if (other.gameObject.CompareTag("Weapon"))
         {
-        if(!sandWorm.IsBulling)
-        sandWorm.SandWormHP -= Player.Instance.PlayerTotalDamage();
+            if (!sandWorm.IsBulling)
+            {
+                int randomnum = Random.Range(0, 4);
+                    switch (randomnum)
+                {
+                    case 0:
+                        SoundManager.Instance.PlayEffect("SandWormDamage1");
+                        break;
+                    case 1:
+                        SoundManager.Instance.PlayEffect("SandWormDamage2");
+                        break;
+                    case 2:
+                        SoundManager.Instance.PlayEffect("SandWormDamage3");
+                        break;
+                    case 3:
+                        SoundManager.Instance.PlayEffect("SandWormDamage4");
+                        break;
+                }
+               
 
+                sandWorm.SandWormHP -= Player.Instance.PlayerTotalDamage();
+                Debug.Log(Player.Instance.PlayerTotalDamage());
+            }
         }
-     
+
     }
 
     private void OnTriggerStay(Collider other)

@@ -10,6 +10,7 @@ public class Attack_Ground02 : StateMachineBehaviour
 
         //Debug.Log("Attack_Ground02 on!");
         Player.Instance.PlayerMotionDamage = 10;
+        SoundManager.Instance.EffectLatePlay("axeDown", 0.5f);
 
     }
 

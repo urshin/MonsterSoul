@@ -42,7 +42,9 @@ public class DefMovement : MonoBehaviour
     void Start()
     {
         GM = GameManager.Instance;
-        Invoke("LateStart",1f);
+        Invoke("LateStart",0.1f);
+        controller = GetComponent<CharacterController>(); // 캐릭터 컨트롤러 컴포넌트 가져오기
+        cam = Camera.main.transform; // 메인 카메라의 Transform 가져오기
         
     }
 
@@ -50,8 +52,6 @@ public class DefMovement : MonoBehaviour
     void LateStart()
     {
         anim = Player.Instance.PlayerAvatar.GetComponent<Animator>();
-        controller = GetComponent<CharacterController>(); // 캐릭터 컨트롤러 컴포넌트 가져오기
-        cam = Camera.main.transform; // 메인 카메라의 Transform 가져오기
         InitializedPlayerInfo();
 
     }
@@ -65,6 +65,9 @@ public class DefMovement : MonoBehaviour
 
     public void Update()
     {
+        if(!GM.IsLoading)
+        {
+
         GetInput(); // 입력 받기
 
 
@@ -87,6 +90,7 @@ public class DefMovement : MonoBehaviour
 
 
         if (!lockMovement) PlayerRotation(); // 이동이 잠긴 상태가 아니면 플레이어 회전
+        }
     }
 
     private void GetInput()
@@ -191,13 +195,13 @@ public class DefMovement : MonoBehaviour
         // 목표 지점 계산
         Vector3 endPos = startPos + rollDir.normalized * rollDistance;
 
-        //while (Vector3.Distance(transform.position, endPos) > 1f)
-        //{
+        while (Vector3.Distance(transform.position, endPos) > 1f)
+        {
         // 계산된 목표 지점 방향으로 이동
         Vector3 moveDirection = (endPos - transform.position).normalized;
         controller.Move(moveDirection * (moveSpeed + (moveSpeed / 2)) * Time.deltaTime);
         yield return null;
-        //}
+        }
     }
 
     private void PlayerRotation()

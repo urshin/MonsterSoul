@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
-
+using UnityEngine.UI;
 
 public class SandWormBoss : MonoBehaviour
 {
@@ -35,6 +35,9 @@ public class SandWormBoss : MonoBehaviour
 
     public bool IsAttacking = false; //샌드웜 공격 상태인지?
 
+    [SerializeField] GameObject SandWormUIHP;
+
+
     [Header("GetInfo")]
     public GameObject Player;
     public Animator anime_Nav;
@@ -43,7 +46,9 @@ public class SandWormBoss : MonoBehaviour
     public Transform SandWormLastPosition;
     public AutoMover wormAutoMover;
 
-    //public enum SandWormState 
+    GameManager GM;
+
+    //public enum SandWormState
     //{
     //    Opening,
     //    Ingage,
@@ -58,21 +63,28 @@ public class SandWormBoss : MonoBehaviour
 
     void Start()
     {
-        
+        GM = GameManager.Instance;
+        GM.SandWormLoad = false;
         SandWormHP = SandWormMaxHP; //HP초기화
         SandWormOriginSpeed = SandWormSpeed;
         Player = GameObject.FindGameObjectWithTag("Player");
         SetPosition = GameObject.FindGameObjectWithTag("EnemyUpPos").transform;
         UnderSetPosition = GameObject.FindGameObjectWithTag("EnemyUnderPos").transform;
-
+        SandWormUIHP.GetComponent<Slider>().minValue = 0;// 체력 게이지 초기화
+        SandWormUIHP.GetComponent<Slider>().maxValue = SandWormMaxHP; //체력 게이지 초기화
+        Invoke("LateStart", 0.1f);
     }
- 
+
+    void LateStart()
+    {
+       GM.SandWormLoad = true;
+    }
 
     void Update()
     {
         anime_Nav.SetFloat("HP", (SandWormHP/SandWormMaxHP) *100);
-       
 
+        SandWormUIHP.GetComponent<Slider>().value = SandWormHP;
     }
 
     public void StartPattern(string name)
@@ -158,20 +170,20 @@ public class SandWormBoss : MonoBehaviour
             Vector3 position = (i * (((WaveEnd - WaveStart) / Count)) + WaveStart);
 
 
-            // 이 오브젝트가 플레이어 오브젝트를 바라보는 방향을 계산합니다.
+            // 플레이어 오브젝트를 바라보는 방향
             Vector3 directionToPlayer = WaveEnd - WaveStart;
 
-            // 수직 벡터를 계산합니다. 이를 위해 x와 z 구성 요소를 교환하고 그 중 하나를 부호를 바꾸어 사용합니다.
+            // 수직 벡터를 계산합니다.
             Vector3 sideVector = new Vector3(-directionToPlayer.z, 0, directionToPlayer.x).normalized;
 
 
-            // 필요한 경우 sideVector의 크기를 조절할 수 있습니다.
-            float sideVectorMagnitude = _sideVectorMagnitude; // 필요한 크기에 맞게 이 값을 조절하세요.
+            
+            float sideVectorMagnitude = _sideVectorMagnitude; 
             sideVector *= sideVectorMagnitude;
 
             if (i % 2 == 0)
             {
-                // 이제 sideVector를 위치에 추가할 수 있습니다.
+                
                 position += sideVector;
 
             }
@@ -180,7 +192,7 @@ public class SandWormBoss : MonoBehaviour
                 position -= sideVector;
             }
 
-            // 나머지 코드...
+         
 
 
             Vector3 rotation = thing.transform.eulerAngles;

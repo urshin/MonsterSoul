@@ -19,6 +19,7 @@ public class InGameManager : MonoBehaviour
 
     public bool isCutScene;
 
+    public bool IsStore;
     void Start()
     {
         Director = CutScene.GetComponent<PlayableDirector>();
@@ -28,6 +29,7 @@ public class InGameManager : MonoBehaviour
         Invoke("PlayOpening", 0.2f);
         //PlayOpening();
         player = GameObject.FindWithTag("Player");
+        SoundManager.Instance.PlayBGM("BGM_InGame");
     }
 
     int FindScene(string name) //timelineAssets내의 번째를 알려줌
@@ -75,10 +77,28 @@ public class InGameManager : MonoBehaviour
                 GameManager.Instance.IsBossRoomEnter = true;
               
                 playSandWormOpening();
+                Invoke("ShowSandWormUI", 9.5f);
                 break;
             }
         }
     }
+    [SerializeField] GameObject ShowSandWormUIHP;
+    void ShowSandWormUI()
+    {
+        StartCoroutine(UIMoving(new Vector3(0, 10, 0), 10));
+    }
+    IEnumerator UIMoving(Vector3 Howmuch, float Smooth)
+    {
+        for (int i = 0; i < Smooth; i++)
+        {
+            ShowSandWormUIHP.GetComponent<RectTransform>().localPosition += Howmuch;
+            yield return new WaitForSecondsRealtime(0.01f);
+
+        }
+    
+    }
+
+
     void playSandWormOpening()
     {
         Director.playableAsset = timelineAssets[FindScene("SandWormOpening")];

@@ -57,6 +57,21 @@ public class GameManager : MonoBehaviour
     public List<GameObject> BossList = new List<GameObject>();
 
     public AnimatorController Worrior;
-    
 
+    [Header("Load")]
+    public bool IsLoading;
+    public bool PlayerLoad;
+    public bool SandWormLoad;
+
+    private void Update()
+    {
+        if(PlayerLoad&&SandWormLoad)
+        {
+            IsLoading = false;
+        }
+        else
+        {
+            IsLoading = true;
+        }
+    }
 }

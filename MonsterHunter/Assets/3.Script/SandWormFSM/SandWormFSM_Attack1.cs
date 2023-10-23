@@ -16,7 +16,8 @@ public class SandWormFSM_Attack1 : StateMachineBehaviour
     private float initialDistance; // 초기 플레이어와의 거리
 
     float Timer;
-
+    private float timerr;
+    public float roarInterval = 0.5f; // Under 사운드 재생 간격
     // OnStateEnter는 전환 시작시 호출되며 상태 기계가 이 상태를 평가하기 시작합니다.
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -26,7 +27,7 @@ public class SandWormFSM_Attack1 : StateMachineBehaviour
         
         SandWormBoss.Instance.IsAttacking = true; //보스 공격상태 초기화
         initialDistance = Vector3.Distance(animator.gameObject.transform.position, Player.transform.position);
-        Debug.Log("초기거리!"+initialDistance);
+        //Debug.Log("초기거리!"+initialDistance);
         int distance = (int)(initialDistance*0.2f);
         Vector3 startpos = animator.transform.position+new Vector3(0,10,0);
         Vector3 wavestart = animator.transform.position + new Vector3(0, 10, 0);
@@ -44,6 +45,16 @@ public class SandWormFSM_Attack1 : StateMachineBehaviour
     {
        // float distance = Vector3.Distance(worm.transform.position, PlayerOriginPos);
         float distance = Vector3.Distance(animator.gameObject.transform.position, Player.transform.position);
+
+        timerr += Time.deltaTime;
+
+        if (timerr >= roarInterval)
+        {
+            SoundManager.Instance.PlayEffect("Under");
+            timerr = 0f; // 타이머를 리셋하여 재생 간격마다 사운드를 재생
+        }
+
+
         Timer += Time.deltaTime;    
         // 만약 초기 거리보다 커지면 Ingage 상태를 종료
         if (Timer > 4.5f)

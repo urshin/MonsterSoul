@@ -30,7 +30,7 @@ public class SandWormFSM_Idle : StateMachineBehaviour
         if (animator.GetBool("Idle"))
         {
 
-
+            SoundManager.Instance.PlayEffect("UnderRoar");
             animator.gameObject.transform.position = SandWormBoss.Instance.UnderSetPosition.position;
             SandWormBoss.Instance.Goto(animator.gameObject, SandWormBoss.Instance.SandWormLastPosition.position, SandWormBoss.Instance.SetPosition.position, 10f);
             SandWormBoss.Instance.IsAttacking= false;

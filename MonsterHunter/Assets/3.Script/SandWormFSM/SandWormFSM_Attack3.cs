@@ -29,6 +29,7 @@ public class SandWormFSM_Attack3 : StateMachineBehaviour
         SandWormBoss.Instance.IsAttacking = true;
         timeRemaining = timerDuration;
         lastTimeChecked = Time.time;
+        SoundManager.Instance.PlayEffect("Roar");
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

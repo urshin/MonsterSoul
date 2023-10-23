@@ -10,6 +10,7 @@ public class Attack04 : StateMachineBehaviour
 
        // Debug.Log("Attack04 on!");
         Player.Instance.PlayerMotionDamage = 8;
+        SoundManager.Instance.EffectLatePlay("axe4", 0.5f);
 
     }
 
