@@ -74,4 +74,7 @@ public class GameManager : MonoBehaviour
             IsLoading = true;
         }
     }
+
+
+    
 }
