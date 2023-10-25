@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using UnityEngine.UI;
 
 public class InGameManager : MonoBehaviour
 {
@@ -21,9 +23,13 @@ public class InGameManager : MonoBehaviour
 
     public bool IsStore; // 상점 중 여부
     public GameObject PausePopUp;
+    public GameObject BossEnding;
+    public GameObject PlayerEnding;
 
+    public float TimeSpend;
     void Start()
     {
+        TimeSpend = 0f; //시간 초기화
         Director = CutScene.GetComponent<PlayableDirector>();
 
         Director.enabled = true;
@@ -53,23 +59,61 @@ public class InGameManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            TheWorld(); // 게임 시간 일시 정지 함수 호출
+            TheWorld(PausePopUp); // 게임 시간 일시 정지 함수 호출
         }
     }
 
+    private void FixedUpdate()
+    {
+        TimeSpend += Time.deltaTime;
+    }
+
+    private float targetTimeScale = 0.1f; // 목표 타임 스케일 값
+    private float timeScaleChangeRate = 0.1f; // 매 프레임마다 변경될 타임 스케일 값
+    private float minTimeScale = 0.0f; // 시간이 멈출 최소 타임 스케일 값
+
+    public void SlowDowntime( )
+    {
+        StartCoroutine(SlowDownTime());
+        Debug.Log("시간 줄기 on");
+        
+    }
+    IEnumerator SlowDownTime( )
+    {
+        Debug.Log("시간 줄기 진입");
+        while (Time.timeScale > minTimeScale)
+        {
+            Time.timeScale -= timeScaleChangeRate;
+
+            if (Time.timeScale < targetTimeScale)
+            {
+                Time.timeScale = targetTimeScale;
+            }
+
+            yield return null;
+        }
+
+        //pop.SetActive(true);
+        //// 시간이 멈춘 후에 원하는 작업을 수행할 수 있습니다.
+        //pop.transform.Find("Time").gameObject.GetComponent<Text>().text = "Time:" + TimeSpend.ToString();
+        yield return null;
+    }
+
+
+
     bool Timestop = false;
 
-    public void TheWorld()
+    public void TheWorld(GameObject pop)
     {
         Timestop = !Timestop; // 게임 시간 일시 정지 토글
         if (Timestop)
         {
-            PausePopUp.SetActive(true);
+            pop.SetActive(true);
             Time.timeScale = 0;
         }
         else
         {
-            PausePopUp.SetActive(false);
+            pop.SetActive(false);
             Time.timeScale = 1;
         }
     }
@@ -122,4 +166,9 @@ public class InGameManager : MonoBehaviour
         Director.playableAsset = timelineAssets[FindScene("Opening")]; // 게임 오프닝 타임라인 재생
         Director.Play();
     }
+
+
+
+
+
 }

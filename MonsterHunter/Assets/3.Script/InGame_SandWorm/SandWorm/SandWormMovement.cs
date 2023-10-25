@@ -109,7 +109,12 @@ public class SandWormMovement : MonoBehaviour
                 BossEnter = false;
             }
 
+            if (SandWormBoss.Instance. SandWormHP <= 0)
+            {
+                anime.SetBool("IsDead", true);
 
+
+            }
 
 
 

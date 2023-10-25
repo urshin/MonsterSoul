@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AnimationEvent : MonoBehaviour
 {
@@ -13,7 +14,11 @@ public class AnimationEvent : MonoBehaviour
     private void Start()
     {
         //anim = GetComponent<Animator>();
+        if (SceneManager.GetActiveScene().name != "Lobby")
+        {
         anim = Player.Instance.PlayerAvatar.GetComponent<Animator>();
+
+        }
         ComboPossible = false;
     }
 

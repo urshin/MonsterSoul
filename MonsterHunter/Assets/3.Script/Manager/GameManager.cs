@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.UI;
 
 //public enum PlayerState
 //{
@@ -63,6 +64,11 @@ public class GameManager : MonoBehaviour
     public bool PlayerLoad;
     public bool SandWormLoad;
 
+
+    [Header("PopUp")]
+    public GameObject Message;
+
+
     private void Update()
     {
         if(PlayerLoad&&SandWormLoad)
@@ -75,6 +81,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    public void SpawnMessage(string thing)
+    {
+        GameObject Canvas = GameObject.Find("GUI");
+        GameObject PopUp =  Instantiate(Message, Canvas.transform);
+        PopUp.transform.GetChild(1).transform.GetChild(0).gameObject.GetComponent<Text>().text = thing;
+    }
     
 }

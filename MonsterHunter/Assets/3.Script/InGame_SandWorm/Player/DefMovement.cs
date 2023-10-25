@@ -105,7 +105,7 @@ public class DefMovement : MonoBehaviour
         right.Normalize(); // 정규화하여 방향 벡터 생성
 
         // 공격, 구르기 또는 점프 중이 아닌 경우에만 이동 입력을 처리
-        if (anim.GetBool("IsAttack") || anim.GetBool("IsRoll") || anim.GetBool("IsJump"))
+        if (anim.GetBool("IsAttack") || anim.GetBool("IsRoll") || anim.GetBool("IsJump")||anim.GetBool("IsBuff"))
         {
             // 이동 입력을 무시
         }
@@ -136,6 +136,15 @@ public class DefMovement : MonoBehaviour
                 {
                     anim.SetBool("IsJump", true);
                 }
+                if (!anim.GetBool("IsJump") && !anim.GetBool("IsRoll"))
+                {
+                    if (Input.GetKeyDown(KeyCode.R)&& Player.Instance.InventoryItems.Count > 0)
+                    {
+                       Player.Instance. UsingItem();
+                        anim.SetBool("IsBuff", true);
+                    }
+                }    
+               
             }
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {

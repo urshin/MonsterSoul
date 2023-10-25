@@ -47,7 +47,7 @@ public class SandWormBoss : MonoBehaviour
     public AutoMover wormAutoMover;
 
     GameManager GM;
-
+    bool IsBossDead = false;
     //public enum SandWormState
     //{
     //    Opening,
@@ -72,6 +72,7 @@ public class SandWormBoss : MonoBehaviour
         UnderSetPosition = GameObject.FindGameObjectWithTag("EnemyUnderPos").transform;
         SandWormUIHP.GetComponent<Slider>().minValue = 0;// 체력 게이지 초기화
         SandWormUIHP.GetComponent<Slider>().maxValue = SandWormMaxHP; //체력 게이지 초기화
+        IsBossDead = false;
         Invoke("LateStart", 0.1f);
     }
 
@@ -85,8 +86,16 @@ public class SandWormBoss : MonoBehaviour
         anime_Nav.SetFloat("HP", (SandWormHP/SandWormMaxHP) *100);
 
         SandWormUIHP.GetComponent<Slider>().value = SandWormHP;
-    }
 
+        if(SandWormHP <= 0&&!IsBossDead)
+        {
+
+         //   InGameManager.Instance.SlowDowntime(InGameManager.Instance.BossEnding);
+            //InGameManager.Instance.SlowDowntime();
+            IsBossDead=true;
+        }
+    }
+    
     public void StartPattern(string name)
     {
         //Debug.Log("패턴 시작"+name);

@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class Player : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class Player : MonoBehaviour
     GameManager GM;
 
     public float PlayerHP; // 플레이어의 체력
+    public float playerOriginHP; // 플레이어의 원래체력
     public float PlayerSpeed; // 플레이어의 이동 속도
     public float PlayerAttack; // 플레이어의 공격력
     public float PlayerrStamina; // 플레이어의 스테미너
@@ -44,15 +46,22 @@ public class Player : MonoBehaviour
     public Animator anime;
 
 
+    float LeftX;
+    float RightX;
+    bool IsPlayerDead;
 
+    [Header("PlayerEffect")]
+    [SerializeField] GameObject[] EffectBox;
 
     private void Start()
     {
+        IsPlayerDead = false;
         GM = GameManager.Instance;
         GM.PlayerLoad = false;
         InitializedPlayerInfo();
         Invoke("LateStart", 0.1f);
         isPlayerBulling = false;//공격 당하지 않음
+        
     }
 
 
@@ -75,9 +84,27 @@ public class Player : MonoBehaviour
             PlayerrStamina_Bar.GetComponent<Slider>().value = PlayerrStamina;
 
 
-
-
-
+            BuyStore();
+            float wheelInput = Input.GetAxis("Mouse ScrollWheel");
+            if (wheelInput > 0)
+            {
+                Debug.Log("휠 내림");
+                LeftMove();
+            }
+            else if (wheelInput < 0)
+            {
+                // 휠을 당겨 올렸을 때의 처리 ↓
+                RightMove();
+            }
+           
+            if(PlayerHP <= 0)
+            {
+                if(!IsPlayerDead)
+                {
+                    InGameManager.Instance.SlowDowntime();
+                    IsPlayerDead = true;    
+                }
+            }
 
         }
 
@@ -86,6 +113,7 @@ public class Player : MonoBehaviour
     void InitializedPlayerInfo()
     {
         PlayerHP = GM.PlayerHp;
+        playerOriginHP = GM.PlayerHp;
         PlayerSpeed = GM.PlayerSpeed;
         PlayerAttack = GM.PlayerAttack;
         PlayerrStamina = GM.PlayerStamina;
@@ -156,7 +184,65 @@ public class Player : MonoBehaviour
         anime.SetBool(name, false);
     }
 
-    public List<GameObject> ItemList = new List<GameObject>();
+    void ItemEffect(int Itemnum)
+    {
+        Debug.Log(ItemInven[Itemnum].transform.GetChild(1).gameObject.name);
+        string itemname = ItemInven[Itemnum].transform.GetChild(1).name.Replace("(Clone)", "").Trim();
+        switch (itemname)
+        {
+            case "Banana":
+                Debug.Log(itemname + "효과 발동!!");
+                EffectOn(PlayerEffect.Buff);
+                break;
+            case "Orange":
+                Debug.Log(itemname + "효과 발동!!");
+                EffectOn(PlayerEffect.Heal);
+                break;
+        }
+
+
+    }
+    public enum PlayerEffect
+    {
+        Buff = 0,
+        Heal = 1,
+    }
+    public PlayerEffect PlayerVFX;
+    void EffectOn(PlayerEffect effect)
+    {
+        if (effect == PlayerEffect.Buff)
+        {
+            Instantiate(EffectBox[(int)PlayerEffect.Buff], transform);
+            SoundManager.Instance.PlayEffect("Buff");
+            PlayerAttack += 20;
+            void OffBuff()
+            {
+                PlayerAttack -= 20;
+            }
+            Invoke("OffBuff",10);
+        }
+
+        if (effect == PlayerEffect.Heal)
+        {
+            Instantiate(EffectBox[(int)PlayerEffect.Heal], transform);
+            SoundManager.Instance.PlayEffect("Heal");
+            PlayerHP += playerOriginHP / 4; //플레이어 채력 회복
+        }
+
+    }
+
+   
+    public void  UsingItem()
+    {
+        ItemEffect((int)ItemNumber);
+        Destroy(ItemInven[(int)ItemNumber]);
+        ItemInven.RemoveAt((int)ItemNumber);
+        InventoryItems.RemoveAt((int)ItemNumber);
+        CurrentItemCount--;
+        InitializedItem();
+    }
+
+
 
     [SerializeField] float Radius;//상점 근처 범위
     [SerializeField] LayerMask targetLayers; // 타겟 레이어 마스크 나중에 플레이어로 지정
@@ -177,8 +263,6 @@ public class Player : MonoBehaviour
                 SellingThing = thing.GetComponent<Store>().SellingTing;
                 return;
 
-
-
             }
 
         }
@@ -190,23 +274,75 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        BuyStore();
 
-        if(Input.GetKeyDown (KeyCode.P))
-        {
-            ItemInvenUI.Clear();
-            CurrentItemCount = 0;
-        }
+
 
     }
     public List<GameObject> ItemInven = new List<GameObject>(); // 아이템 목록
-    public List<GameObject> ItemInvenUI = new List<GameObject>(); // 아이템 UI 목록
     [SerializeField] RenderTexture RenderText; // 렌더 텍스처
     [SerializeField] GameObject ItemUI; // 아이템 UI 프리팹
-    [SerializeField] GameObject ItemUISpawnPos; // 아이템 UI를 생성할 위치
+    [SerializeField] GameObject ItemUISpawnPos; // 아이템을 생성할 위치
     [SerializeField] RenderTexture RT; // 렌더 텍스처
-    [SerializeField] GameObject Inventory; // 인벤토리 오브젝트
-    [SerializeField] GameObject rawimage; // RawImage 오브젝트
+
+    [SerializeField] GameObject Inventory; // ItemUI생성할 위치
+    [SerializeField] GameObject ItemRawImage; //Item이미지
+
+    public List<GameObject> InventoryItems = new List<GameObject>();
+   
+    void InitializedItem()
+    {
+        Transform inventoryTransform = Inventory.transform;
+
+        // Inventory의 모든 하위 객체를 제거합니다.
+        foreach (Transform child in inventoryTransform)
+        {
+            Destroy(child.gameObject);
+        }
+        InventoryItems = new List<GameObject>();
+        InventoryItems.Clear();
+
+        // 아이템 개수만큼 반복해서 아이템을 생성합니다.
+        for (int i = 0; i < ItemInven.Count; i++)
+        {
+            GameObject fruit = Instantiate(ItemRawImage, inventoryTransform);
+            fruit.GetComponent<RawImage>().texture = ItemInven[i].GetComponentInChildren<Camera>().targetTexture;
+            InventoryItems.Add(fruit);
+            // 아이템 위치 조정
+
+            if (i == InventoryItems.Count - 1 && InventoryItems.Count >= 3)
+            {
+                fruit.transform.localPosition -= new Vector3(xOffset, 0, 0);
+
+            }
+            else
+            {
+
+                //float xOffset = i * 180; // 아이템 간격
+                fruit.transform.localPosition += new Vector3(xOffset * i, 0, 0);
+
+            }
+
+
+        }
+        if(InventoryItems.Count>0)
+        {
+        LeftX = InventoryItems[0].transform.localPosition.x - (xOffset + 1);
+        //RightX = InventoryItems[InventoryItems.Count - 2].transform.localPosition.x + 1;
+
+        if (InventoryItems.Count > 3)
+        {
+            RightX = InventoryItems[InventoryItems.Count - 2].transform.localPosition.x + (xOffset + 1);
+        }
+        else
+        {
+            RightX = InventoryItems[0].transform.localPosition.x + (xOffset + 1);
+
+        }
+
+        }
+
+    }
+
 
     void SpawnItemUI(GameObject fruit)
     {
@@ -218,28 +354,11 @@ public class Player : MonoBehaviour
         RT = Instantiate(RenderText);
         itemUIShow.GetComponentInChildren<Camera>().targetTexture = RT;
 
-        // RawImage를 생성하고 렌더 텍스처를 할당한 후 UI 목록에 추가
-        GameObject RI = Instantiate(rawimage, Inventory.transform);
-        RI.GetComponent<RawImage>().texture = RT;
-
-        ItemInvenUI.Add(RI);
         ItemInven.Add(itemUIShow);
-        initializedItemUI();
     }
 
-    void initializedItemUI()
-    {
-        float spacing = 180f; // 각 아이템 사이의 간격
-        for (int i = 0; i < ItemInvenUI.Count; i++)
-        {
-            // 아이템 UI의 위치를 조정
-            Vector3 newPosition = new Vector3(i * spacing, 0, 0);
-            ItemInvenUI[i].transform.localPosition = newPosition;
 
-          
-            
-        }
-    }
+
     private void BuyStore()
     {
         StoreShow();
@@ -252,9 +371,11 @@ public class Player : MonoBehaviour
             {
                 if (CurrentItemCount < PlayerMaximumItem)
                 {
-                    ItemList.Add(SellingThing);
-                    CurrentItemCount++;
                     SpawnItemUI(SellingThing);
+                    CurrentItemCount++;
+                    InitializedItem();
+
+
                 }
             }
         }
@@ -266,6 +387,141 @@ public class Player : MonoBehaviour
                 StoreCanvas.SetActive(false);
             }
         }
+    }
+
+
+    private float moveDuration = 0.05f; // 이동에 걸리는 시간 (조절 가능)
+    private bool isMoving = false; // 이동 중 여부를 나타내는 변수
+
+    [SerializeField] float ItemNumber = 0;
+    public void RightMove()
+    {
+        if (InventoryItems.Count > 1)
+        {
+            if (!isMoving)
+            {
+                StartCoroutine(MoveRight(InventoryItems));
+                ++ItemNumber;
+                if (ItemNumber > InventoryItems.Count-1)
+                {
+                    ItemNumber = 0;
+                }
+            }
+        }
+    }
+
+    public void LeftMove()
+    {
+        if (InventoryItems.Count > 1)
+        {
+            if (!isMoving)
+            {
+                StartCoroutine(MoveRowLeft(InventoryItems));
+                --ItemNumber;
+                if (ItemNumber-1 < 0)
+                {
+                    ItemNumber = InventoryItems.Count-1;
+                }
+            }
+        }
+    }
+
+
+    float xOffset = 180;
+
+    //오른쪽 스크롤 코루틴
+    private IEnumerator MoveRight(List<GameObject> row)
+    {
+        isMoving = true; // 이동 중 플래그 설정
+
+        List<Vector3> startPositions = new List<Vector3>();
+        List<Vector3> endPositions = new List<Vector3>();
+
+        // 시작 위치와 목표 위치 저장
+        foreach (GameObject item in row)
+        {
+            startPositions.Add(item.transform.localPosition); // 시작 위치 저장
+            endPositions.Add(item.transform.localPosition + new Vector3(xOffset, 0, 0)); // 목표 위치 저장
+        }
+
+        float elapsedTime = 0f;
+
+        // 이동 시간동안 반복
+        while (elapsedTime < moveDuration)
+        {
+            float t = elapsedTime / moveDuration; // 보간값 계산
+
+            // 모든 객체에 대해 현재 위치를 보간하여 설정
+            for (int i = 0; i < row.Count; i++)
+            {
+                row[i].transform.localPosition = Vector3.Lerp(startPositions[i], endPositions[i], t);
+            }
+
+            elapsedTime += Time.deltaTime; // 경과 시간 업데이트
+            yield return null; // 한 프레임을 기다립니다.
+        }
+
+        // 이동이 끝난 후 최종 위치 설정
+        for (int i = 0; i < row.Count; i++)
+        {
+            row[i].transform.localPosition = endPositions[i];
+
+            // 오른쪽 끝으로 넘어간 객체 처리
+            if (row[i].transform.localPosition.x > RightX)
+            {
+                row[i].transform.localPosition -= new Vector3(xOffset * row.Count, 0, 0);
+            }
+        }
+
+        isMoving = false; // 이동 종료 후 플래그 해제
+    }
+
+
+    //왼쪽 스크롤 코루틴
+    private IEnumerator MoveRowLeft(List<GameObject> row)
+    {
+        isMoving = true; // 이동 중 플래그 설정
+
+        List<Vector3> startPositions = new List<Vector3>();
+        List<Vector3> endPositions = new List<Vector3>();
+
+        // 시작 위치와 목표 위치 저장
+        foreach (GameObject item in row)
+        {
+            startPositions.Add(item.transform.localPosition); // 시작 위치 저장
+            endPositions.Add(item.transform.localPosition - new Vector3(xOffset, 0, 0)); // 목표 위치 저장 (왼쪽으로 이동)
+        }
+
+        float elapsedTime = 0f;
+
+        // 이동 시간 동안 반복
+        while (elapsedTime < moveDuration)
+        {
+            float t = elapsedTime / moveDuration; // 보간값 계산
+
+            // 모든 객체에 대해 현재 위치를 보간하여 설정
+            for (int i = 0; i < row.Count; i++)
+            {
+                row[i].transform.localPosition = Vector3.Lerp(startPositions[i], endPositions[i], t);
+            }
+
+            elapsedTime += Time.deltaTime; // 경과 시간 업데이트
+            yield return null; // 한 프레임을 기다립니다.
+        }
+
+        // 이동이 끝난 후 최종 위치 설정
+        for (int i = 0; i < row.Count; i++)
+        {
+            row[i].transform.localPosition = endPositions[i];
+
+            // 왼쪽 끝으로 넘어간 객체 처리
+            if (row[i].transform.localPosition.x < LeftX)
+            {
+                row[i].transform.localPosition += new Vector3(xOffset * row.Count, 0, 0);
+            }
+        }
+
+        isMoving = false; // 이동 종료 후 플래그 해제
     }
 
 

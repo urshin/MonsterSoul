@@ -28,11 +28,18 @@ public class IngameButton : MonoBehaviour
         {
             case "Back":
             case "Continue":
-                InGameManager.Instance.TheWorld();
+                InGameManager.Instance.TheWorld(InGameManager.Instance.PausePopUp);
                 break;
             case "Exit":
                 SceneManager.LoadScene("Lobby");
                 break;
+            case "Restart":
+                string name = GameManager.Instance.CurrentBoss.name.Trim();
+                SceneManager.LoadScene(name);
+                 break;
+               
+
+
         }
     }
 

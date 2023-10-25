@@ -53,25 +53,46 @@ public class Lobby_Button : MonoBehaviour
     {
        if(GameManager.Instance.CurrentPlayerCharactor!= null&& GameManager.Instance.CurrentWeapon !=null && GameManager.Instance.CurrentBoss !=null)
         {
+          
             string name = GameManager.Instance.CurrentBoss.name.Trim();
-        SceneManager.LoadScene(name);
-
+            // 씬이 존재하는지 확인
+            if (SceneExists(name))
+            {
+                SceneManager.LoadScene(name);
+            }
+            else
+            {
+                GameManager.Instance.SpawnMessage("해당하는 보스는 아직 구현이 안되어 있습니다. 신속히 추가하겠습니다");
+            }
         }
        else
         {
             if(GameManager.Instance.CurrentPlayerCharactor == null)
             {
-                Debug.Log("캐릭터 선택 필요");
+                GameManager.Instance.SpawnMessage("플레이어를 선택해 주세요");
             }
             if (GameManager.Instance.CurrentWeapon == null)
             {
-                Debug.Log("무기 선택 필요");
+                GameManager.Instance.SpawnMessage("무기를 선택해 주세요");
             }
             if (GameManager.Instance.CurrentBoss == null)
             {
-                Debug.Log("보스 선택 필요");
+                GameManager.Instance.SpawnMessage("보스를 선택해주세요");
             }
         }
     }
+    bool SceneExists(string sceneName)
+    {
+        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++) //씬의 카운트 만큼
+        {
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(i); 
+            string sceneNameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(scenePath);//i인덱스의 씬의 이름 가져오기 
 
+            if (sceneNameWithoutExtension == sceneName) //씬의 이름과 인자값이 같은 경우 true 반환
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
