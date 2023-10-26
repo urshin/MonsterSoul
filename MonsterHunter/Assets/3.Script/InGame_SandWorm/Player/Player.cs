@@ -101,7 +101,7 @@ public class Player : MonoBehaviour
             {
                 if(!IsPlayerDead)
                 {
-                    InGameManager.Instance.SlowDowntime();
+                    InGameManager.Instance.SlowDowntime(InGameManager .Instance .PlayerEnding);
                     IsPlayerDead = true;    
                 }
             }

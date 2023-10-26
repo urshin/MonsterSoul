@@ -13,7 +13,7 @@ public class SandWormFSM_Death : StateMachineBehaviour
         {
             Destroy(animator.gameObject.GetComponent<AutoMover>());
         }
-        InGameManager.Instance.SlowDowntime();
+        InGameManager.Instance.SlowDowntime(InGameManager.Instance.BossEnding);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

@@ -29,6 +29,8 @@ public class IngameButton : MonoBehaviour
             case "Back":
             case "Continue":
                 InGameManager.Instance.TheWorld(InGameManager.Instance.PausePopUp);
+                GameManager.Instance.cursorLocked = false;
+
                 break;
             case "Exit":
                 SceneManager.LoadScene("Lobby");

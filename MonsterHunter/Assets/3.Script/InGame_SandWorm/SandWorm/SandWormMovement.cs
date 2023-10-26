@@ -72,18 +72,9 @@ public class SandWormMovement : MonoBehaviour
 
 
 
-    //void MakeAuto()
-    //{
-    //    MakeAutoMove(position, 10);
-    //}
-    //void StartAutoMoving()
-    //{
-    //    CurrentAutoMover.StartMoving();
-    //}
     void PauseAutoMoving()
     {
         CurrentAutoMover.Pause();
-       // sandWorm.currentSandWormState = SandWorm.SandWormState.Ingage;
         Invoke("Ingage", 3f);
         
     }
@@ -93,7 +84,6 @@ public class SandWormMovement : MonoBehaviour
         
         SandWormBoss.Instance.StartPattern("InGame");
         Destroy(CurrentAutoMover);
-      // anime.SetBool("InGame", true);
     }
 
     
@@ -115,11 +105,6 @@ public class SandWormMovement : MonoBehaviour
 
 
             }
-
-
-
-
-
 
 
 

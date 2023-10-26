@@ -9,7 +9,13 @@ using UnityEngine.UI;
 public class InGameManager : MonoBehaviour
 {
     public static InGameManager Instance;
-
+    public void Awake()
+    {
+        if (Instance == null) // 플레이어의 인스턴스가 아직 생성되지 않았을 때
+        {
+            Instance = this; // 현재 스크립트의 인스턴스를 할당하여 싱글톤 패턴을 구현
+        }
+    }
     [SerializeField] TimelineAsset[] timelineAssets; // 타임라인 애셋 배열
     [SerializeField] GameObject CutScene; // 디렉터를 포함한 게임 오브젝트
     PlayableDirector Director; // 플레이어블 디렉터
@@ -31,6 +37,7 @@ public class InGameManager : MonoBehaviour
     {
         TimeSpend = 0f; //시간 초기화
         Director = CutScene.GetComponent<PlayableDirector>();
+        GameManager.Instance.cursorLocked = false;
 
         Director.enabled = true;
         // 오프닝 재생
@@ -69,16 +76,16 @@ public class InGameManager : MonoBehaviour
     }
 
     private float targetTimeScale = 0.1f; // 목표 타임 스케일 값
-    private float timeScaleChangeRate = 0.1f; // 매 프레임마다 변경될 타임 스케일 값
+    private float timeScaleChangeRate = 0.01f; // 매 프레임마다 변경될 타임 스케일 값
     private float minTimeScale = 0.0f; // 시간이 멈출 최소 타임 스케일 값
 
-    public void SlowDowntime( )
+    public void SlowDowntime(GameObject pop)
     {
-        StartCoroutine(SlowDownTime());
+        StartCoroutine(SlowDownTime(pop));
         Debug.Log("시간 줄기 on");
         
     }
-    IEnumerator SlowDownTime( )
+    IEnumerator SlowDownTime( GameObject pop)
     {
         Debug.Log("시간 줄기 진입");
         while (Time.timeScale > minTimeScale)
@@ -87,15 +94,17 @@ public class InGameManager : MonoBehaviour
 
             if (Time.timeScale < targetTimeScale)
             {
-                Time.timeScale = targetTimeScale;
+                Time.timeScale = minTimeScale;
+                break;
             }
 
             yield return null;
         }
 
-        //pop.SetActive(true);
-        //// 시간이 멈춘 후에 원하는 작업을 수행할 수 있습니다.
-        //pop.transform.Find("Time").gameObject.GetComponent<Text>().text = "Time:" + TimeSpend.ToString();
+        pop.SetActive(true);
+        // 시간이 멈춘 후에 원하는 작업을 수행할 수 있습니다.
+        GameManager.Instance.cursorLocked = true;
+        pop.transform.GetChild(0).transform.Find("Time").gameObject.GetComponent<Text>().text = "Time:" + TimeSpend.ToString();
         yield return null;
     }
 

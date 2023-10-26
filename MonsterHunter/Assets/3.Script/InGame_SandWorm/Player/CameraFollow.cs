@@ -14,7 +14,6 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] float senstivity = 60; // 마우스 감도
 
     [SerializeField] float rotX , rotY; // 카메라 회전값 (X와 Y 각)
-    bool cursorLocked = false; // 커서 잠금 상태 여부
     Transform cam; // 메인 카메라의 Transform
 
     public bool lockedTarget; // 타겟 잠금 여부
@@ -49,19 +48,7 @@ public class CameraFollow : MonoBehaviour
             LookAtTarget(); // 타겟을 바라보는 카메라 회전 동작
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (cursorLocked)
-            {
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-            }
-            else
-            {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-        }
+      
     }
     public float x;
     public float y;

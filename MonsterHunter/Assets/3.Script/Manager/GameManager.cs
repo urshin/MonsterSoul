@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
     public List<GameObject> PlayerCharactor = new List<GameObject>();
     public List<GameObject> WeaponList = new List<GameObject>();
     public List<GameObject> BossList = new List<GameObject>();
+    public bool cursorLocked = false; // 커서 잠금 상태 여부
 
     public AnimatorController Worrior;
 
@@ -79,8 +80,26 @@ public class GameManager : MonoBehaviour
         {
             IsLoading = true;
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            MakeCursorLocked();
+        }
+            if (cursorLocked)
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            else
+            {
+                Cursor.visible = false; 
+                Cursor.lockState = CursorLockMode.Locked;
+            }
     }
 
+    public void MakeCursorLocked()
+    {
+        cursorLocked = !cursorLocked;
+    }
     public void SpawnMessage(string thing)
     {
         GameObject Canvas = GameObject.Find("GUI");

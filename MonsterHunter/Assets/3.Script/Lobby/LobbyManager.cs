@@ -50,9 +50,11 @@ public class LobbyManager : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1.0f;
         CurrentLobbystate = LobbyState.Logo;
         StartCoroutine(FadeIn(Logo,2f));
-
+        GameManager.Instance.cursorLocked = true;
+        SoundManager.Instance.PlayBGM("BGM_Lobby");
     }
     private void Update()
     {

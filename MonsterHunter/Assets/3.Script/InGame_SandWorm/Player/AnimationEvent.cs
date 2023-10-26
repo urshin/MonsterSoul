@@ -8,7 +8,7 @@ public class AnimationEvent : MonoBehaviour
 {
     Animator anim;
     public bool ComboPossible;
-    
+    [SerializeField] GameObject Weapon;
 
 
     private void Start()
@@ -20,6 +20,7 @@ public class AnimationEvent : MonoBehaviour
 
         }
         ComboPossible = false;
+        Weapon = GameObject.FindGameObjectWithTag("Weapon");
     }
 
     private void Update()
@@ -30,11 +31,11 @@ public class AnimationEvent : MonoBehaviour
 
     void WeaponCollider_True ()
     {
-        Player.Instance.CurrentWeapon.GetComponent<CapsuleCollider>().enabled = true;
+        Weapon.GetComponent<CapsuleCollider>().enabled = true;
     }
     void WeaponCollider_False()
     {
-        Player.Instance.CurrentWeapon.GetComponent<CapsuleCollider>().enabled = false;
+        Weapon.GetComponent<CapsuleCollider>().enabled = false;
     }
 
   
