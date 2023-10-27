@@ -37,14 +37,22 @@ public class IngameButton : MonoBehaviour
                 break;
             case "Restart":
                 string name = GameManager.Instance.CurrentBoss.name.Trim();
-                SceneManager.LoadScene(name);
+                
+               StartCoroutine(GameManager.Instance. Restart(name));
+
+
                  break;
                
 
 
         }
     }
-
+    IEnumerator Restart(string name)
+    {
+        SceneManager.LoadScene("Lobby");
+        yield return new WaitForSecondsRealtime(0.1f);
+        SceneManager.LoadScene(name);
+    }
 
 
 }

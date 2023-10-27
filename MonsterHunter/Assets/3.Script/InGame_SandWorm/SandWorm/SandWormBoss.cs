@@ -3,7 +3,6 @@ using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
@@ -153,98 +152,99 @@ public class SandWormBoss : MonoBehaviour
     //오토 무브 함수
     public void MakingSinMovement(GameObject thing, float _sideVectorMagnitude, float _Speed, Vector3 StartPos, Vector3 WaveStart, Vector3 WaveEnd, Vector3 endpos, float StopTime, string circle, AutoMoverLoopingStyle loopstyle)
     {
-
+        // WaveStart와 WaveEnd 사이의 거리 계산
         int many = (int)Vector3.Distance(WaveStart, WaveEnd);
+        // AnchorPoint 개수 초기화
         int Count = many / 3;
-        if(circle == "circle")
+
+        // 'circle' 파라미터 값에 따라 Count 설정
+        if (circle == "circle")
         {
             Count = 1;
         }
+
+        // AutoMover 컴포넌트 추가 및 설정
         wormAutoMover = thing.AddComponent<AutoMover>();
         wormAutoMover.RunOnStart = false;
-
         wormAutoMover.AnchorPointSpace = AutoMoverAnchorPointSpace.world;
-
         wormAutoMover.FaceForward = true;
         wormAutoMover.DynamicUpVector = false;
-        wormAutoMover.AddAnchorPoint(thing.transform.position, new Vector3(0, 0, 0), thing.transform.transform.localScale);
-        wormAutoMover.AddAnchorPoint(StartPos, new Vector3(0, 0, 0), thing.transform.transform.localScale);
-        wormAutoMover.AddAnchorPoint(WaveStart, new Vector3(0, 0, 0), thing.transform.transform.localScale);
-        // Sin 함수를 사용하여 X 좌표를 조정하여 양옆으로 움직임
 
+        // AnchorPoint 추가
+        wormAutoMover.AddAnchorPoint(thing.transform.position, new Vector3(0, 0, 0), thing.transform.localScale);
+        wormAutoMover.AddAnchorPoint(StartPos, new Vector3(0, 0, 0), thing.transform.localScale);
+        wormAutoMover.AddAnchorPoint(WaveStart, new Vector3(0, 0, 0), thing.transform.localScale);
 
+        // Sin 함수를 사용하여 좌우로 움직이도록 설정
         for (int i = 1; i <= Count; i++)
         {
-
+            // AnchorPoint 위치 계산
             Vector3 position = (i * (((WaveEnd - WaveStart) / Count)) + WaveStart);
 
-
-            // 플레이어 오브젝트를 바라보는 방향
+            // WaveEnd와 WaveStart 사이의 방향 벡터 계산
             Vector3 directionToPlayer = WaveEnd - WaveStart;
 
-            // 수직 벡터를 계산합니다.
+            // 수직 벡터 계산
             Vector3 sideVector = new Vector3(-directionToPlayer.z, 0, directionToPlayer.x).normalized;
 
-
-            
-            float sideVectorMagnitude = _sideVectorMagnitude; 
+            // sideVector 크기 설정
+            float sideVectorMagnitude = _sideVectorMagnitude;
             sideVector *= sideVectorMagnitude;
 
+            // 짝수 번째 AnchorPoint에서는 sideVector를 더하고 홀수 번째에서는 빼기
             if (i % 2 == 0)
             {
-                
                 position += sideVector;
-
             }
             else
             {
                 position -= sideVector;
             }
 
-         
-
-
             Vector3 rotation = thing.transform.eulerAngles;
-            Vector3 scale = thing.transform.transform.localScale;
+            Vector3 scale = thing.transform.localScale;
             wormAutoMover.AddAnchorPoint(position, rotation, scale);
         }
+
+        // AutoMover 속도 설정
         wormAutoMover.Length = _Speed;
-        if(loopstyle == AutoMoverLoopingStyle.bounce)
-        {
-        wormAutoMover.LoopingStyle = AutoMoverLoopingStyle.bounce;
 
-        }
-        if(loopstyle == AutoMoverLoopingStyle.repeat)
+        // LoopingStyle 설정
+        if (loopstyle == AutoMoverLoopingStyle.bounce)
         {
-        wormAutoMover.LoopingStyle = AutoMoverLoopingStyle.repeat;
-
+            wormAutoMover.LoopingStyle = AutoMoverLoopingStyle.bounce;
         }
-        if(loopstyle == AutoMoverLoopingStyle.loop)
+        else if (loopstyle == AutoMoverLoopingStyle.repeat)
         {
-        wormAutoMover.LoopingStyle = AutoMoverLoopingStyle.loop;
-
+            wormAutoMover.LoopingStyle = AutoMoverLoopingStyle.repeat;
         }
-        
-        wormAutoMover.StopAfter =1; //한번만 실행하고 멈추게함
+        else if (loopstyle == AutoMoverLoopingStyle.loop)
+        {
+            wormAutoMover.LoopingStyle = AutoMoverLoopingStyle.loop;
+        }
+
+        // AutoMover가 한 번만 실행하도록 설정
+        wormAutoMover.StopAfter = 1;
         wormAutoMover.CurveStyle = AutoMoverCurve.SplineThroughPoints;
 
-
+        // 종료 지점에 AnchorPoint 추가
         wormAutoMover.AddAnchorPoint(endpos, thing.transform.eulerAngles, thing.transform.localScale);
 
+        // AutoMover 시작
         wormAutoMover.StartMoving();
 
-        if(StopTime > 0)
+        // StopTime이 0보다 크면 일정 시간 후 AutoMover 일시 정지
+        if (StopTime > 0)
         {
-
-        StartCoroutine(StopMoving());
+            StartCoroutine(StopMoving());
         }
 
+        // AutoMover 일시 정지를 위한 코루틴
         IEnumerator StopMoving()
         {
             yield return new WaitForSeconds(StopTime);
             wormAutoMover.Pause();
         }
     }
-
 
 }

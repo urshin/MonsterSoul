@@ -33,7 +33,7 @@ public class SandWormFSM_Idle : StateMachineBehaviour
             SoundManager.Instance.PlayEffect("UnderRoar");
             animator.gameObject.transform.position = SandWormBoss.Instance.UnderSetPosition.position;
             SandWormBoss.Instance.Goto(animator.gameObject, SandWormBoss.Instance.SandWormLastPosition.position, SandWormBoss.Instance.SetPosition.position, 10f);
-            SandWormBoss.Instance.IsAttacking= false;
+            SandWormBoss.Instance.IsAttacking = false;
 
 
             timer = 0;
@@ -64,23 +64,30 @@ public class SandWormFSM_Idle : StateMachineBehaviour
 
             }
 
-            //나중에 랜덤 함수 돌리기
-            int randomPattern = Random.Range(0, 3); 
-            switch (randomPattern)
+            if (InGameManager.Instance.DistanceBTWPlayer >= 20)
             {
-                case 0:
-                    animator.SetBool("SWAttack1", true);
-                    break;
-                case 1:
-                    animator.SetBool("SWAttack2", true);
-                    break;
-                case 2:
-                    animator.SetBool("SWAttack3", true);
-                    break;
+                animator.SetBool("SWAttack1", true);
+            }
+            else
+            {
+                //나중에 랜덤 함수 돌리기
+                int randomPattern = Random.Range(0, 2);
+                switch (randomPattern)
+                {
+                    
+                    case 0:
+                        animator.SetBool("SWAttack2", true);
+                        break;
+                    case 1:
+                        animator.SetBool("SWAttack3", true);
+                        break;
+                }
+
             }
 
 
-           
+
+
             animator.SetBool("Idle", false);
             timer = 0;
         }

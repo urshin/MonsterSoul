@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class DefMovement : MonoBehaviour
 {
-    public static DefMovement Instance;
-    GameManager GM;
+    public static DefMovement Instance; // 이 클래스의 인스턴스를 다른 곳에서 참조할 수 있도록 정적 변수로 선언
+    GameManager GM; // 게임 매니저 클래스의 인스턴스를 저장하는 변수
+
     // Awake 메소드는 게임 오브젝트가 활성화될 때 호출됩니다.
     public void Awake()
     {
@@ -28,68 +29,57 @@ public class DefMovement : MonoBehaviour
     public Vector3 dir; // 이동 방향 벡터
     public float Nowspeed; // 캐릭터 현재 움직임 스피드.
 
-    [Header("Settings")]  // 나중에 플레이어에 따라 바뀜 // start에서 참조해오기
+    [Header("Settings")] // 나중에 플레이어에 따라 바뀜 // start에서 참조해오기
     public float gravity = 25f; // 중력
     public float moveSpeed = 4f; // 이동 속도
     public float RunningSpeed = 7f; // 캐릭터 뛰기 스피드
     public float rotateSpeed = 3f; // 회전 속도
-    public float JumpSpeed = 5f; // 점프 
+    public float JumpSpeed = 5f; // 점프
 
     public bool lockMovement; // 이동 잠금 여부
 
-
-    
     void Start()
     {
-        GM = GameManager.Instance;
-        Invoke("LateStart",0.1f);
+        GM = GameManager.Instance; // 게임 매니저의 인스턴스 가져오기
+        Invoke("LateStart", 0.1f); // LateStart 메소드를 0.1초 뒤에 실행
         controller = GetComponent<CharacterController>(); // 캐릭터 컨트롤러 컴포넌트 가져오기
         cam = Camera.main.transform; // 메인 카메라의 Transform 가져오기
-        
     }
-
 
     void LateStart()
     {
-        anim = Player.Instance.PlayerAvatar.GetComponent<Animator>();
-        InitializedPlayerInfo();
-
+        anim = Player.Instance.PlayerAvatar.GetComponent<Animator>(); // 플레이어의 아바타에 연결된 애니메이터 컴포넌트 가져오기
+        InitializedPlayerInfo(); // 플레이어 정보 초기화 메소드 호출
     }
+
     void InitializedPlayerInfo()
     {
-        moveSpeed = GM.PlayerSpeed;
+        moveSpeed = GM.PlayerSpeed; // 게임 매니저에서 설정한 플레이어 이동 속도 가져오기
         Nowspeed = moveSpeed; // 이동 속도 초기화
-        JumpSpeed = GM.PlayerJumpPower;
-        RunningSpeed = moveSpeed * 1.4f;
+        JumpSpeed = GM.PlayerJumpPower; // 게임 매니저에서 설정한 플레이어 점프 파워 가져오기
+        RunningSpeed = moveSpeed * 1.4f; // 이동 속도에 기반한 뛰기 속도 설정
     }
 
     public void Update()
     {
-        if(!GM.IsLoading)
+        if (!GM.IsLoading) // 게임이 로딩 중이 아닌 경우에만 업데이트 메소드 실행
         {
+            GetInput(); // 입력 받기
 
-        GetInput(); // 입력 받기
-
-
-        if (Player.Instance.isPlayerBulling) //공격받는 상태
-        {
-           if( Player.Instance.IsDown)
+            if (Player.Instance.isPlayerBulling) // 공격받는 상태
             {
-            anim.SetTrigger("Down");
-                Player.Instance.IsDown = false;
+                if (Player.Instance.IsDown)
+                {
+                    anim.SetTrigger("Down"); // 애니메이터 트리거 "Down" 설정
+                    Player.Instance.IsDown = false; // 플레이어 다운 상태 해제
+                }
             }
-            
+            else
+            {
+                PlayerMovement(); // 플레이어 이동
+            }
 
-        }
-        else
-        {
-            PlayerMovement(); // 플레이어 이동
-
-        }
-
-
-
-        if (!lockMovement) PlayerRotation(); // 이동이 잠긴 상태가 아니면 플레이어 회전
+            if (!lockMovement) PlayerRotation(); // 이동이 잠긴 상태가 아니면 플레이어 회전
         }
     }
 
@@ -105,13 +95,13 @@ public class DefMovement : MonoBehaviour
         right.Normalize(); // 정규화하여 방향 벡터 생성
 
         // 공격, 구르기 또는 점프 중이 아닌 경우에만 이동 입력을 처리
-        if (anim.GetBool("IsAttack") || anim.GetBool("IsRoll") || anim.GetBool("IsJump")||anim.GetBool("IsBuff"))
+        if (anim.GetBool("IsAttack") || anim.GetBool("IsRoll") || anim.GetBool("IsJump") || anim.GetBool("IsBuff"))
         {
             // 이동 입력을 무시
         }
         else
         {
-            Nowspeed = moveSpeed;
+            Nowspeed = moveSpeed; // 현재 이동 속도 설정
             dir = (forward * moveInput.y + right * moveInput.x).normalized; // 입력을 기반으로 이동 방향 벡터 생성
         }
     }
@@ -129,37 +119,36 @@ public class DefMovement : MonoBehaviour
 
         if (controller.isGrounded)
         {
-            anim.SetBool("IsJump", false);
+            anim.SetBool("IsJump", false); // 점프 애니메이션 비활성화
             if (!anim.GetBool("IsAttack"))
             {
                 if (Input.GetButton("Jump") && !anim.GetBool("IsRoll"))
                 {
-                    anim.SetBool("IsJump", true);
+                    anim.SetBool("IsJump", true); // 점프 애니메이션 활성화
                 }
                 if (!anim.GetBool("IsJump") && !anim.GetBool("IsRoll"))
                 {
-                    if (Input.GetKeyDown(KeyCode.R)&& Player.Instance.InventoryItems.Count > 0)
+                    if (Input.GetKeyDown(KeyCode.R) && Player.Instance.InventoryItems.Count > 0)
                     {
-                       Player.Instance. UsingItem();
-                        anim.SetBool("IsBuff", true);
+                        Player.Instance.UsingItem(); // 아이템 사용
+                        anim.SetBool("IsBuff", true); // 버프 애니메이션 활성화
                     }
-                }    
-               
+                }
             }
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 if (!anim.GetBool("IsRoll"))
                 {
-                    Roll();
-                    anim.SetTrigger("Rolling");
+                    Roll(); // 구르기 메소드 호출
+                    anim.SetTrigger("Rolling"); // 구르기 애니메이션 트리거 설정
                 }
             }
         }
 
-        HandleMouseInput(KeyCode.Mouse0, "LeftClick");
-        HandleMouseInput(KeyCode.Mouse1, "RightClick");
+        HandleMouseInput(KeyCode.Mouse0, "LeftClick"); // 마우스 왼쪽 버튼 입력 처리
+        HandleMouseInput(KeyCode.Mouse1, "RightClick"); // 마우스 오른쪽 버튼 입력 처리
 
-        // 애니메이터의 파라미터 설정 
+        // 애니메이터의 파라미터 설정
         anim.SetFloat("Movement", dir.magnitude, 0.1f, Time.deltaTime);
         anim.SetFloat("Horizontal", moveInput.x, 0.1f, Time.deltaTime);
         anim.SetFloat("Vertical", moveInput.y, 0.1f, Time.deltaTime);
@@ -169,27 +158,27 @@ public class DefMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(mouseButton))
         {
-            anim.SetBool(boolName, true);
+            anim.SetBool(boolName, true); // 마우스 버튼 입력에 따른 불리언 변수 설정
             if (anim.GetBool("AbleCombo"))
             {
-                anim.SetTrigger("GoNextAttack");
-                anim.SetBool("AbleCombo", false);
+                anim.SetTrigger("GoNextAttack"); // 다음 공격 트리거 설정
+                anim.SetBool("AbleCombo", false); // 콤보 가능 여부 비활성화
             }
         }
         if (Input.GetKeyUp(mouseButton))
         {
-            anim.SetBool(boolName, false);
+            anim.SetBool(boolName, false); // 마우스 버튼 뗄 때 불리언 변수 비활성화
         }
     }
 
     public void Roll()
     {
-        StartCoroutine(Roll_Movement());
+        StartCoroutine(Roll_Movement()); // 구르기 메소드 시작
     }
 
     private IEnumerator Roll_Movement()
     {
-        anim.SetBool("IsRoll", true);
+        anim.SetBool("IsRoll", true); // 구르기 애니메이션 활성화
 
         // 구르는 동안의 방향 벡터 저장
         Vector3 rollDir = (cam.forward * moveInput.y + cam.right * moveInput.x).normalized;
@@ -206,10 +195,10 @@ public class DefMovement : MonoBehaviour
 
         while (Vector3.Distance(transform.position, endPos) > 1f)
         {
-        // 계산된 목표 지점 방향으로 이동
-        Vector3 moveDirection = (endPos - transform.position).normalized;
-        controller.Move(moveDirection * (moveSpeed + (moveSpeed / 2)) * Time.deltaTime);
-        yield return null;
+            // 계산된 목표 지점 방향으로 이동
+            Vector3 moveDirection = (endPos - transform.position).normalized;
+            controller.Move(moveDirection * (moveSpeed + (moveSpeed / 2)) * Time.deltaTime);
+            yield return null;
         }
     }
 

@@ -23,6 +23,7 @@ public class InGameManager : MonoBehaviour
     [SerializeField] GameObject BossTrigger; // 보스 트리거
 
     public GameObject player; // 플레이어 게임 오브젝트
+    public GameObject Boss; // 보스 게임 오브젝트
     public GameObject CameraTarget; // 카메라 타겟 게임 오브젝트
 
     public bool isCutScene; // 현재 컷씬 중 여부
@@ -31,6 +32,8 @@ public class InGameManager : MonoBehaviour
     public GameObject PausePopUp;
     public GameObject BossEnding;
     public GameObject PlayerEnding;
+
+    public float DistanceBTWPlayer;
 
     public float TimeSpend;
     void Start()
@@ -43,6 +46,7 @@ public class InGameManager : MonoBehaviour
         // 오프닝 재생
         Invoke("PlayOpening", 0.2f);
         player = GameObject.FindWithTag("Player");
+        Boss = GameObject.FindWithTag("Enemy");
         SoundManager.Instance.PlayBGM("BGM_InGame");
     }
 
@@ -68,6 +72,7 @@ public class InGameManager : MonoBehaviour
         {
             TheWorld(PausePopUp); // 게임 시간 일시 정지 함수 호출
         }
+        DistanceBTWPlayer = Vector3.Distance(player.transform.position, Boss.transform.position);
     }
 
     private void FixedUpdate()

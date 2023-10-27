@@ -174,7 +174,6 @@ public class EnemyLockOn : MonoBehaviour
         Quaternion rot = Quaternion.LookRotation(dir); // 타겟을 향한 회전을 계산
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * lookAtSmoothing); // 부드럽게 회전 적용
     }
-    [SerializeField] float aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, noticeZone); // 디버깅용으로 주변 탐지 범위를 시각적으로 나타냄

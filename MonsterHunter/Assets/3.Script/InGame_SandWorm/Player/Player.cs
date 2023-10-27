@@ -160,11 +160,27 @@ public class Player : MonoBehaviour
         //Debug.Log(other.gameObject.name);
         if (SandWormBoss.Instance.IsAttacking && !isPlayerBulling)
         {
-            if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("EnemyAttack"))
+            if (other.gameObject.CompareTag("Enemy")||other.gameObject.CompareTag("EnemyAttack"))
             {
                 isPlayerBulling = true;
                 IsDown = true;
                 Debug.Log("공습경보");
+                PlayerHP -= SandWormBoss.Instance.SandWormAttackDamage;
+                SoundManager.Instance.PlayEffect("GotDamage");
+
+            }
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (SandWormBoss.Instance.IsAttacking && !isPlayerBulling)
+        {
+            if (collision.gameObject.CompareTag("EnemyAttack"))
+            {
+                isPlayerBulling = true;
+                IsDown = true;
+                Debug.Log("공습경보");
+                
                 PlayerHP -= SandWormBoss.Instance.SandWormAttackDamage;
                 SoundManager.Instance.PlayEffect("GotDamage");
 

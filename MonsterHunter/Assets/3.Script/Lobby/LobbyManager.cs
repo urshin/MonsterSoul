@@ -55,7 +55,14 @@ public class LobbyManager : MonoBehaviour
         StartCoroutine(FadeIn(Logo,2f));
         GameManager.Instance.cursorLocked = true;
         SoundManager.Instance.PlayBGM("BGM_Lobby");
+        GameManager.Instance.IsBossRoomEnter = false;
+
+        ResetData();
     }
+
+    
+
+
     private void Update()
     {
        if(Input.anyKeyDown && CurrentLobbystate == LobbyState.Logo)
@@ -67,6 +74,16 @@ public class LobbyManager : MonoBehaviour
 
 
     }
+
+    void ResetData()
+    {
+        
+        GameManager.Instance.CurrentBoss = null;
+        GameManager.Instance.CurrentPlayerCharactor = null;
+        GameManager.Instance.CurrentWeapon = null;
+
+    }
+
     void StartButton()
     {
         SetOn(State);

@@ -7,7 +7,7 @@ public class Looktoplayer : MonoBehaviour
 
     private void Update()
     {
-        transform.LookAt(GameObject.FindGameObjectWithTag("Player").transform);
+        transform.LookAt(GameObject.FindGameObjectWithTag("MainCamera").transform);
     }
 
 

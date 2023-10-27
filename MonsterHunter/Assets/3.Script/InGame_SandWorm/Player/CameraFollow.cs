@@ -11,7 +11,7 @@ public class CameraFollow : MonoBehaviour
 
     [SerializeField] float follow_smoothing = 5; // 카메라가 대상을 따라가는 부드러움 정도
     [SerializeField] float rotate_Smoothing = 5; // 카메라 회전 부드러움 정도
-    [SerializeField] float senstivity = 60; // 마우스 감도
+    [SerializeField] float senstivity = 120; // 마우스 감도
 
     [SerializeField] float rotX , rotY; // 카메라 회전값 (X와 Y 각)
     Transform cam; // 메인 카메라의 Transform
@@ -27,7 +27,7 @@ public class CameraFollow : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked; // 커서 잠금
         cam = Camera.main.transform; // 메인 카메라의 Transform 가져옴
         //target = GameObject.FindGameObjectWithTag("Player").transform;
-        
+        senstivity = 120 * GameManager.Instance.MouseSensitivity;
     }
 
     void Update()

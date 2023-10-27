@@ -14,29 +14,29 @@ public class DataManager : MonoBehaviour
     }
 
     GameManager GM;
-    string filePath;
+    string PlayerInformation;
 
     void Start()
     {
         // 파일 경로 설정
-        filePath = "PlayerCharactorData/PlayerCharactorInfo";
+        PlayerInformation = "PlayerCharactorData/PlayerCharactorInfo";
 
         GM = GameManager.Instance;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            InputPlayerInfo(GameManager.Instance.CurrentPlayerCharactor.name);
-        }
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    InputPlayerInfo(GameManager.Instance.CurrentPlayerCharactor.name);
+        //}
     }
 
     public void InputPlayerInfo(string Name)
     {
         // 아마 게임오브젝트로 읽은 name에 clone이나 다른 이름이 들어가 있어서 그런든 contain으로 해보기
         // 리소스 폴더 내에서 텍스트 파일 읽기
-        TextAsset textAsset = Resources.Load<TextAsset>(filePath);
+        TextAsset textAsset = Resources.Load<TextAsset>(PlayerInformation);
 
         if (textAsset != null)
         {
@@ -101,7 +101,7 @@ public class DataManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("File not found: " + filePath);
+            Debug.LogError("File not found: " + PlayerInformation);
         }
     }
 }

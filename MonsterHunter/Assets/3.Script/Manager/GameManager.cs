@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 //public enum PlayerState
@@ -69,6 +70,10 @@ public class GameManager : MonoBehaviour
     [Header("PopUp")]
     public GameObject Message;
 
+    private void Start()
+    {
+        MouseSensitivity = 0.6f;
+    }
 
     private void Update()
     {
@@ -106,5 +111,10 @@ public class GameManager : MonoBehaviour
         GameObject PopUp =  Instantiate(Message, Canvas.transform);
         PopUp.transform.GetChild(1).transform.GetChild(0).gameObject.GetComponent<Text>().text = thing;
     }
-    
+    public IEnumerator Restart(string name)
+    {
+        SceneManager.LoadScene("Lobby");
+        yield return new WaitForSecondsRealtime(0.1f);
+        SceneManager.LoadScene(name);
+    }
 }
